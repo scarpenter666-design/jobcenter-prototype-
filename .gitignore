@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+playwright-report/
+test-results/
+Beispiel Prompts/
+*.log
+*.png
+!public/jobcenter-harburg-logo.png
