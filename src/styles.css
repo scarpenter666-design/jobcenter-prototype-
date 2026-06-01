@@ -131,6 +131,14 @@ body {
   display: block;
 }
 
+.logo-placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1a1a1a;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
 .app-wordmark-text {
   font-size: 19px;
   font-weight: 700;

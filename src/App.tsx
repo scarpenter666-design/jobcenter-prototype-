@@ -50,7 +50,6 @@ import {
   type ThemeMode,
   type UserProfile
 } from "./lib/appState";
-import { getPublicAssetUrl } from "./lib/assets";
 import { generatePrompt, type PromptResult } from "./lib/promptGenerator";
 
 type Tab = "home" | "lernen" | "praxis" | "pruefen" | "prompts" | "bakira";
@@ -95,18 +94,12 @@ function matchesPrompt(prompt: SavedPrompt, query: string): boolean {
 
 // ── Onboarding Portal Header ───────────────────────────────────────────────────
 
-const jobcenterLogoUrl = getPublicAssetUrl("jobcenter-harburg-logo.png");
-
 function OnboardingPortalHeader() {
   return (
     <div className="onboarding-portal-header">
       <div className="portal-header-logo-wrap">
         <span className="logo-pill">
-          <img
-            src={jobcenterLogoUrl}
-            alt="Jobcenter Landkreis Harburg"
-            className="portal-header-logo"
-          />
+          <span className="logo-placeholder">Jobcenter Logo</span>
         </span>
         <span className="portal-header-brand">Digital souverän im Jobcenter</span>
       </div>
@@ -322,7 +315,7 @@ function TopBar({
     <header className="top-bar" aria-label="App-Kopfzeile">
       <button className="app-logo-btn" onClick={onLogoClick} aria-label="Zur Übersicht">
         <span className="logo-pill">
-          <img src={jobcenterLogoUrl} alt="Jobcenter Landkreis Harburg" className="top-bar-logo" />
+          <span className="logo-placeholder">Jobcenter Logo</span>
         </span>
         <span className="app-wordmark-text">Digital souverän</span>
       </button>

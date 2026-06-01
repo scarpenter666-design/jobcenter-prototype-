@@ -60,7 +60,7 @@ test.describe("Onboarding — first visit", () => {
     const header = page.locator(".onboarding-portal-header");
     await expect(header).toBeVisible();
     await expect(header.getByText(/Digital souverän im Jobcenter/)).toBeVisible();
-    await expect(header.locator("img.portal-header-logo")).toBeVisible();
+    await expect(header.locator(".logo-placeholder")).toHaveText("Jobcenter Logo");
     const bg = await header.evaluate((el) => getComputedStyle(el).backgroundColor);
     // red background: rgb(192, 0, 26)
     expect(bg).toMatch(/192|rgb/i);
@@ -274,9 +274,9 @@ test("settings panel has no KI-Erfahrung field", async ({ page }) => {
 
 // ── TopBar and Home layout ────────────────────────────────────────────────────
 
-test("app header shows logo image and no progress bar", async ({ page }) => {
+test("app header shows logo placeholder and no progress bar", async ({ page }) => {
   await completeOnboarding(page);
-  await expect(page.locator(".top-bar img.top-bar-logo")).toBeVisible();
+  await expect(page.locator(".top-bar .logo-placeholder")).toHaveText("Jobcenter Logo");
   await expect(page.locator(".top-progress")).toHaveCount(0);
   await expect(page.locator(".top-progress-track")).toHaveCount(0);
 });
