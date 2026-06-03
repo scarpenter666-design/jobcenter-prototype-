@@ -121,3 +121,68 @@ Hinweis: Bereits vorhandene JOB-APP-17/Vitest-Dateien und `package.json`/`packag
 - `vitest >= 4.1.8` aktiv, Advisory `GHSA-5xrq-8626-4rwp` verschwunden (`npm audit` exit 0).
 - Unit/Build/E2E unverändert grün und in Aussagekraft gleich.
 - `package-lock.json`: nur erwartete Vitest-/Vite-Test-Abhängigkeiten geändert, keine ungewollten Begleit-Bumps.
+
+## 2026-06-03 — Codex Check: JOB-APP-17 + JOB-APP-18-Verbindung
+
+Auf Svens Bitte geprüft, ob JOB-APP-17 mit JOB-APP-18 verbunden werden muss.
+
+Ergebnis:
+
+- JOB-APP-17 ist als Basiszustand umgesetzt: `package.json` enthält `vitest: ^4.1.8`.
+- `npm ls vitest` → exit 0, `vitest@4.1.8`.
+- `npm audit --audit-level=moderate` → exit 0, `0 vulnerabilities`.
+- Der frühere JOB-APP-18-Hinweis „wenn Audit wegen Vitest/JOB-APP-17 rot bleibt“ ist damit überholt.
+
+Aktion:
+
+- `handoffs/2026-06-03-codex-to-claude-job-app-18-visible-rework-adaptive-learning-overview-filters-dark-nav.md` aktualisiert:
+  - JOB-APP-17/Vitest 4 ist jetzt erwarteter Basiszustand.
+  - Claude soll Vitest nicht zurücksetzen oder mit JOB-APP-18 vermischen.
+  - `npm audit` soll für JOB-APP-18 grundsätzlich exit 0 liefern; falls nicht, ist das eine neue/verbleibende Meldung und muss konkret dokumentiert werden.
+
+## 2026-06-03 — Claude Builder-Log: JOB-APP-18 (sichtbare QA + Klarheits-Fix)
+
+### Befund (Kernergebnis)
+
+Svens Rückmeldung „JOB-APP-16-Punkte wirken nicht umgesetzt" wurde zuerst per **sichtbarer Browser-QA** mit frischem Dev-Server (Port 3013 war frei → kein Stale-Server) und geleertem `localStorage` geprüft (temporäres Playwright-Screenshot-Skript, danach entfernt). Ergebnis: **Alle fünf Punkte rendern korrekt** im aktuellen Code:
+
+- `Lernen → KI-Grundlagen für alle`: Einsteiger zeigt „KI ist dasselbe wie ein menschlicher Sachbearbeiter" etc.; Fortgeschritten „KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext…" + „Datenschutzrisiken … erst nach Einführung". Sichtbar unterschiedlich.
+- `Lernen → Mythos oder Realität?`: Einsteiger 3 einfache Aussagen; Fortgeschritten 4 anspruchsvolle (Letztverantwortung, Teamstandards, DSGVO-Werbung, automatisierte Letztentscheidung).
+- `Praxis`: initial keine `.praxis-example-card`, Themen-Chips + Eingabefeld sichtbar; nach Themenwahl Karten.
+- `Prompts`: initial keine `.prompt-card`, Kategorie-Chips + Generator sichtbar; nach Auswahl Karten.
+- Dunkel + Rot: aktives Sidebar-Feld farbig mit weißer Schrift/Icon.
+
+**Root Cause der „nicht sichtbar"-Meldung ist Umgebung, nicht Code:** JOB-APP-16/17 sind nur lokal in `main`, `origin/main` steht auf `88de9a6` (vor JOB-APP-16) → die deployte GitHub-Pages-App zeigt den alten Stand. Zusätzlich kann alter `localStorage` (kein Re-Onboarding mit hohem Score) den Eindruck verstärken. Es wurde KEIN identischer Code „neu umgesetzt".
+
+### Änderung (Klarheits-Fix)
+
+Damit die Level-Anpassung unmissverständlich sichtbar ist, wurde ein **KI-Level-Badge** ergänzt:
+
+- `src/App.tsx`: `LevelBadge`-Komponente; eingebunden in „KI-Grundlagen für alle" (Lernfragen-Block) und „Mythos oder Realität?" → Text „Angepasst an dein KI-Level: <Level>".
+- `src/styles.css`: `.level-badge` (kompakte Pille).
+- `tests/smoke.spec.ts`: Test, dass das Badge je Onboarding-Score „Einsteiger" bzw. „Fortgeschritten" zeigt.
+
+### Kommandos
+
+- `npm test` → exit 0, 46/46 Unit-Tests grün.
+- `npm run build` → exit 0.
+- `npm run test:e2e` → exit 0, 68/68 E2E-Tests grün (inkl. neuem Badge-Test).
+- `npm audit --audit-level=moderate` → exit 0, **0 vulnerabilities** (JOB-APP-17-Basis intakt; `npm ls vitest` = 4.1.8).
+- `git diff --check` → exit 0.
+
+### Stale-Server/localStorage/Preview als Ursache geprüft
+
+- Port 3013 vor QA frei → kein alter Dev-Server.
+- QA mit `localStorage.clear()` + Reload → frischer Onboarding-Zustand je Score.
+- Build erzeugt frisches `dist`; QA lief gegen frisch gestarteten Vite-Dev-Server.
+
+### Offene Risiken / Hinweis an Sven
+
+- **Damit die Änderungen für Sven sichtbar werden, muss `main` nach `origin/main` gepusht werden** (löst GitHub-Pages-Deploy aus). Bis dahin zeigt die deployte App den alten Stand.
+- Beim lokalen Testen: harter Reload + `localStorage` der App leeren, sonst bleibt das alte Profil/Level aktiv.
+
+### Review-Fokus für Codex
+
+- Nur `src/App.tsx`, `src/styles.css`, `tests/smoke.spec.ts`, `notes/test-log.md` geändert; Vitest/JOB-APP-17 unangetastet.
+- Badge spiegelt `profile.aiLevel`; keine Regression (68/68 grün).
+- Kernfeatures waren bereits vorhanden; dieser Commit ergänzt nur die sichtbare Level-Kennzeichnung.

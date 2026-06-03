@@ -1034,6 +1034,20 @@ body {
   margin: 0;
 }
 
+/* ── Level badge (signals level-adaptive content) ────────────── */
+.level-badge {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 8px;
+}
+
 .lernen-area-intro {
   font-size: 13px;
   color: var(--text-muted);

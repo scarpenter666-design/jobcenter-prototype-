@@ -1262,6 +1262,15 @@ const AI_LEVEL_LABEL: Record<AiLevel, string> = {
   fortgeschritten: "Fortgeschritten"
 };
 
+// Makes the level-adaptive content visible: the questions below adjust to this level.
+function LevelBadge({ aiLevel }: { aiLevel: AiLevel }) {
+  return (
+    <span className="level-badge" aria-label={`Angepasst an dein KI-Level: ${AI_LEVEL_LABEL[aiLevel]}`}>
+      Angepasst an dein KI-Level: {AI_LEVEL_LABEL[aiLevel]}
+    </span>
+  );
+}
+
 const SUPPORT_MSG: Record<AiLevel, string> = {
   einsteiger:
     "Du musst nicht alles auf einmal können. Starte mit dem nächsten sicheren Schritt.",
@@ -1465,6 +1474,7 @@ function LernpfadScreen({
         </div>
         <section className="screen-section" aria-labelledby="lernen-basics-quiz-heading">
           <p className="section-label" id="lernen-basics-quiz-heading">Lernfragen für dein Level</p>
+          <LevelBadge aiLevel={aiLevel} />
           <p className="lernen-area-intro">
             Kurze Fragen passend zu deinem KI-Level. Ordne die Aussagen ein und erhalte direkt Feedback.
           </p>
@@ -1558,6 +1568,7 @@ function LernpfadScreen({
         </div>
         <section className="screen-section" aria-labelledby="lernen-quiz-heading">
           <p className="section-label" id="lernen-quiz-heading">Mythos oder Realität?</p>
+          <LevelBadge aiLevel={aiLevel} />
           <p className="lernen-area-intro">Ordne typische KI-Aussagen ein und erhalte direkt Feedback.</p>
           <div className="myth-list" aria-live="polite" aria-relevant="additions">
             {mythList.map((q, idx) => {

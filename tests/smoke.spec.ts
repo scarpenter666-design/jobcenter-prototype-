@@ -861,6 +861,20 @@ test("KI-Grundlagen area shows level-adaptive Lernfragen", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("Lernen shows a KI-Level badge that reflects the onboarding result", async ({ page }) => {
+  // Low score → Einsteiger
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /Mythos oder Realität öffnen/ }).click();
+  await expect(page.locator(".level-badge")).toHaveText(/Einsteiger/);
+
+  // High score → Fortgeschritten
+  await completeOnboardingHighScore(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /Mythos oder Realität öffnen/ }).click();
+  await expect(page.locator(".level-badge")).toHaveText(/Fortgeschritten/);
+});
+
 test("Lernen tab has an Übersicht button that returns to home", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
