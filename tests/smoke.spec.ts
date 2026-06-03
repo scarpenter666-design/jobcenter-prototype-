@@ -211,9 +211,10 @@ test.describe("Learning flow", () => {
 
 // ── Praxis ────────────────────────────────────────────────────────────────────
 
-test("Praxis tab shows example cards and no Mythos/Realität buttons", async ({ page }) => {
+test("Praxis tab shows example cards after topic selection and no Mythos/Realität buttons", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Praxis" }).click();
+  await page.getByRole("button", { name: "Leistungsbereich" }).click();
   await expect(page.locator(".praxis-example-card").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Mythos" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Realität" })).toHaveCount(0);
@@ -398,6 +399,7 @@ test("prompt library searches built-in prompts", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Prompts" }).click();
   await expect(page.getByRole("heading", { name: /Prompt-Bibliothek/ })).toBeVisible();
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
   await page.getByLabel("Prompts suchen").fill("Datenschutz");
   await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
   await expect(page.getByText("Buergerfreundlich umformulieren")).toHaveCount(0);
@@ -413,6 +415,7 @@ test("custom prompt can be created, edited, deleted and persists locally", async
   await expect(page.getByText("Mein Testprompt")).toBeVisible();
   await page.reload();
   await page.getByRole("button", { name: "Prompts" }).click();
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
   await expect(page.getByText("Mein Testprompt")).toBeVisible();
   await page.getByRole("button", { name: /Mein Testprompt bearbeiten/ }).click();
   await page.getByLabel("Titel").fill("Mein geaenderter Prompt");
@@ -455,6 +458,7 @@ test("generated prompt can be saved and appears in library after reload", async 
   await expect(page.getByText(/Generierter Prompt:/)).toBeVisible();
   await page.reload();
   await page.getByRole("button", { name: "Prompts" }).click();
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
   await expect(page.getByText(/Generierter Prompt:/)).toBeVisible();
 });
 
@@ -502,8 +506,9 @@ test("Grundeingaben neu einrichten resets profile but keeps custom prompt", asyn
   // Complete onboarding again via wizard
   await doOnboardingWizard(page);
 
-  // Custom prompt should still be there
-  await page.getByRole("button", { name: "Prompts" }).click();
+  // Custom prompt should still be there (tab persists on "prompts" after re-onboarding)
+  await page.getByRole("button", { name: "Prompts", exact: true }).click();
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
   await expect(page.getByText("Behaltener Prompt")).toBeVisible();
 });
 
@@ -529,8 +534,9 @@ test("Demo komplett zuruecksetzen removes custom prompts and progress", async ({
   // Complete onboarding fresh via wizard
   await doOnboardingWizard(page);
 
-  // Custom prompt should be gone
-  await page.getByRole("button", { name: "Prompts" }).click();
+  // Custom prompt should be gone (tab persists on "prompts" after re-onboarding)
+  await page.getByRole("button", { name: "Prompts", exact: true }).click();
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
   await expect(page.getByText("Zu loeschender Prompt")).toHaveCount(0);
 });
 
@@ -649,6 +655,7 @@ test("Praxis tab example cards are visible in dark+rot theme", async ({ page }) 
   await expect(page.locator(".app-shell")).toHaveAttribute("data-color", "rot");
 
   await page.getByRole("button", { name: "Praxis" }).click();
+  await page.getByRole("button", { name: "Leistungsbereich" }).click();
   const firstCard = page.locator(".praxis-example-card").first();
   await expect(firstCard).toBeVisible();
 
@@ -820,4 +827,104 @@ test("BAKIRA workspace upload button is keyboard focusable with visible outline"
     return false;
   });
   expect(hasFocusVisibleRule).toBe(true);
+});
+
+// ── Adaptive learning, overview buttons, category filters (JOB-APP-16) ─────────
+
+test("einsteiger and fortgeschritten onboarding show different Mythos questions", async ({ page }) => {
+  // Low score → einsteiger
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /Mythos oder Realität öffnen/ }).click();
+  await expect(
+    page.getByText("KI kann Fachentscheidungen automatisch rechtssicher treffen.")
+  ).toBeVisible();
+  await expect(page.getByText(/DSGVO-konform beworben/)).toHaveCount(0);
+
+  // High score → fortgeschritten
+  await completeOnboardingHighScore(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /Mythos oder Realität öffnen/ }).click();
+  await expect(page.getByText(/DSGVO-konform beworben/)).toBeVisible();
+  await expect(
+    page.getByText("KI kann Fachentscheidungen automatisch rechtssicher treffen.")
+  ).toHaveCount(0);
+});
+
+test("KI-Grundlagen area shows level-adaptive Lernfragen", async ({ page }) => {
+  await completeOnboardingHighScore(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await expect(page.getByText(/Lernfragen für dein Level/)).toBeVisible();
+  await expect(
+    page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext/)
+  ).toBeVisible();
+});
+
+test("Lernen tab has an Übersicht button that returns to home", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.locator(".screen-overview-btn").click();
+  await expect(page.getByText(/Hallo Sven/)).toBeVisible();
+});
+
+test("Praxis tab has Übersicht button, topic selection and no cards until a topic is chosen", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Praxis" }).click();
+  await expect(page.locator(".screen-overview-btn")).toBeVisible();
+  await expect(page.locator(".praxis-topic-bar")).toBeVisible();
+  await expect(page.locator(".praxis-example-card")).toHaveCount(0);
+  await page.getByRole("button", { name: "Eingangszone und Service" }).click();
+  await expect(page.locator(".praxis-example-card").first()).toBeVisible();
+  // Übersicht button returns to home
+  await page.locator(".screen-overview-btn").click();
+  await expect(page.getByText(/Hallo Sven/)).toBeVisible();
+});
+
+test("Prüfen tab has an Übersicht button and Prüfweg still works", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Prüfen" }).click();
+  await expect(page.locator(".screen-overview-btn")).toBeVisible();
+  await page.getByLabel("Fall oder Thema eingeben").fill("Bürgergeld, Einkommen und fehlende Unterlagen");
+  await page.getByRole("button", { name: "Prüfweg anzeigen" }).click();
+  await expect(page.locator(".pruef-result")).toBeVisible();
+  await page.locator(".screen-overview-btn").click();
+  await expect(page.getByText(/Hallo Sven/)).toBeVisible();
+});
+
+test("Prompts tab has Übersicht button, category selection and no cards until a category is chosen", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Prompts" }).click();
+  await expect(page.locator(".screen-overview-btn")).toBeVisible();
+  await expect(page.locator(".prompt-category-bar")).toBeVisible();
+  await expect(page.locator(".prompt-card")).toHaveCount(0);
+  await page.getByRole("button", { name: "Alle Prompts" }).click();
+  await expect(page.locator(".prompt-card").first()).toBeVisible();
+});
+
+test("prompt search works within the selected category", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Prompts" }).click();
+  await page.getByRole("button", { name: "Datenschutz und Sicherheit" }).click();
+  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  await page.getByLabel("Prompts suchen").fill("Datenschutz");
+  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  // A non-datenschutz prompt is not in this category
+  await expect(page.getByText("Buergerfreundlich umformulieren")).toHaveCount(0);
+});
+
+test("dark theme active desktop navigation uses white text for rot, gruen and blau", async ({ page }) => {
+  await completeOnboarding(page);
+  for (const color of ["rot", "gruen", "blau"]) {
+    await page.getByRole("button", { name: /Benutzermenue|Einstellungen/ }).click();
+    await page.getByLabel("Darstellung").selectOption("dark");
+    await page.getByLabel("Farbtemplate").selectOption(color);
+    await page.getByRole("button", { name: /Speichern/ }).click();
+    await expect(page.locator(".app-shell")).toHaveAttribute("data-color", color);
+    // toHaveCSS auto-retries, so it waits out the 0.1s color transition.
+    await expect(
+      page.locator(".desktop-nav-item.active"),
+      `${color} active desktop nav text color`
+    ).toHaveCSS("color", "rgb(255, 255, 255)");
+  }
 });

@@ -977,6 +977,63 @@ body {
 
 .lernen-back-btn:hover { text-decoration: underline; }
 
+/* ── Overview (back to home) button ──────────────────────────── */
+.screen-overview-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.screen-overview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 7px 12px;
+  min-height: 36px;
+}
+
+/* ── Category / topic chip bars (Praxis + Prompts) ───────────── */
+.praxis-topic-bar,
+.prompt-category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.praxis-topic-btn,
+.prompt-category-btn {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.praxis-topic-btn:hover,
+.prompt-category-btn:hover {
+  border-color: var(--primary);
+}
+
+.praxis-topic-btn.active,
+.prompt-category-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.praxis-topic-hint {
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 8px 0;
+  margin: 0;
+}
+
 .lernen-area-intro {
   font-size: 13px;
   color: var(--text-muted);
@@ -1797,6 +1854,17 @@ body {
   --shadow-card:   0 1px 4px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04);
   --warn-light:    rgba(154,58,0,0.18);
   --success-light: rgba(26,122,74,0.18);
+}
+
+/* Dark theme: active colored navigation needs white label/icon for readability
+   (applies to blau, gruen and rot color templates). Light theme is unchanged. */
+.app-shell[data-theme="dark"] .desktop-nav-item.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.app-shell[data-theme="dark"] .nav-tab.active {
+  color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {

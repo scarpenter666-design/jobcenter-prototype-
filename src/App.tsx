@@ -17,16 +17,19 @@ import {
   Zap
 } from "lucide-react";
 import {
+  basicsQuestionsByLevel,
   checkQuestions,
   detectPraxisResponse,
   detectPruefResult,
   modules,
-  mythQuestions,
-  practiceCase,
+  mythQuestionsByLevel,
+  practiceCaseByLevel,
   praxisExamples,
+  praxisTopics,
   roles,
   type ModuleId,
   type PraxisInputResponse,
+  type PraxisTopicId,
   type PruefResult,
   type RoleId
 } from "./data/content";
@@ -89,6 +92,24 @@ function matchesPrompt(prompt: SavedPrompt, query: string): boolean {
   if (!q) return true;
   return [prompt.title, prompt.department, prompt.prompt, prompt.tags.join(" ")].some((v) =>
     v.toLowerCase().includes(q)
+  );
+}
+
+// ── Overview button (back to home) ─────────────────────────────────────────────
+
+function OverviewButton({ onOverview }: { onOverview: () => void }) {
+  return (
+    <div className="screen-overview-row">
+      <button
+        type="button"
+        className="btn-secondary screen-overview-btn"
+        onClick={onOverview}
+        aria-label="Übersicht öffnen"
+      >
+        <House size={16} aria-hidden="true" />
+        Übersicht
+      </button>
+    </div>
   );
 }
 
@@ -714,14 +735,47 @@ function PromptGenerator({
 
 // ── Prompt Library ─────────────────────────────────────────────────────────────
 
+type PromptCategory = { id: string; label: string };
+
+const PROMPT_CATEGORIES: PromptCategory[] = [
+  { id: "alle", label: "Alle Prompts" },
+  { id: "schreiben", label: "Schreiben und Umformulieren" },
+  { id: "pruefen", label: "Prüfen und Qualität" },
+  { id: "datenschutz", label: "Datenschutz und Sicherheit" },
+  { id: "lernen", label: "Lernen und Erklären" },
+  { id: "prompting", label: "Prompting und Struktur" },
+  { id: "teamleitung", label: "Teamleitung" }
+];
+
+// Pragmatic category mapping derived from existing tags/department.
+const CATEGORY_TAG_KEYWORDS: Record<string, string[]> = {
+  schreiben: ["schreiben", "stil", "umformulierung", "sprache", "ton", "verstaendlichkeit"],
+  pruefen: ["pruefung", "qualitaet", "check", "tabelle"],
+  datenschutz: ["datenschutz", "kundendaten", "sicherheit"],
+  lernen: ["lernen", "grundlagen", "quiz", "erklaerung", "recherche", "fachpersona"],
+  prompting: ["prompting", "struktur", "vorlage", "verbesserung", "rueckfragen", "praezision", "generator"],
+  teamleitung: ["teamleitung", "standard"]
+};
+
+function promptInCategory(prompt: SavedPrompt, categoryId: string): boolean {
+  if (categoryId === "alle") return true;
+  if (categoryId === "teamleitung" && prompt.department === "leitung") return true;
+  const keywords = CATEGORY_TAG_KEYWORDS[categoryId] ?? [];
+  const haystack = prompt.tags.join(" ").toLowerCase();
+  return keywords.some((kw) => haystack.includes(kw));
+}
+
 function PromptLibrary({
   prompts,
-  onPromptsChange
+  onPromptsChange,
+  onOverview
 }: {
   prompts: SavedPrompt[];
   onPromptsChange: (prompts: SavedPrompt[]) => void;
+  onOverview: () => void;
 }) {
   const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [editing, setEditing] = useState<SavedPrompt | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [editTitle, setEditTitle] = useState("");
@@ -734,7 +788,9 @@ function PromptLibrary({
   const lastTriggerIdRef = useRef<"new" | string | null>(null);
   const restoreFocusOnCloseRef = useRef(false);
 
-  const filtered = prompts.filter((p) => matchesPrompt(p, query));
+  const filtered = selectedCategory
+    ? prompts.filter((p) => promptInCategory(p, selectedCategory) && matchesPrompt(p, query))
+    : [];
 
   function closeEditor() {
     restoreFocusOnCloseRef.current = true;
@@ -826,6 +882,8 @@ function PromptLibrary({
         )
       );
     }
+    // Make the saved prompt visible right away (custom prompts always live under "Alle Prompts").
+    setSelectedCategory("alle");
     closeEditor();
   }
 
@@ -843,6 +901,7 @@ function PromptLibrary({
 
   function onSaveGeneratedPrompt(newPrompt: SavedPrompt) {
     onPromptsChange([...prompts, newPrompt]);
+    setSelectedCategory("alle");
   }
 
   if (editing) {
@@ -915,6 +974,7 @@ function PromptLibrary({
 
   return (
     <div className="screen-scroll">
+      <OverviewButton onOverview={onOverview} />
       <PromptGenerator onSavePrompt={onSaveGeneratedPrompt} />
       <section className="screen-section" aria-labelledby="prompts-heading">
         <div className="prompt-toolbar">
@@ -924,6 +984,19 @@ function PromptLibrary({
           <button ref={newPromptBtnRef} className="btn-primary prompt-new-btn" onClick={openNew}>
             + Neuer Prompt
           </button>
+        </div>
+        <div className="prompt-category-bar" role="group" aria-label="Prompt-Bereiche">
+          {PROMPT_CATEGORIES.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`prompt-category-btn${selectedCategory === c.id ? " active" : ""}`}
+              onClick={() => setSelectedCategory((prev) => (prev === c.id ? null : c.id))}
+              aria-pressed={selectedCategory === c.id}
+            >
+              {c.label}
+            </button>
+          ))}
         </div>
         <label htmlFor="prompt-search" className="sr-only">
           Prompts suchen
@@ -937,6 +1010,11 @@ function PromptLibrary({
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Prompts suchen"
         />
+        {selectedCategory === null ? (
+          <p className="prompt-empty">
+            Wähle oben einen Bereich, um passende Prompts zu sehen.
+          </p>
+        ) : (
         <div className="prompt-grid">
           {filtered.length === 0 && <p className="prompt-empty">Keine Prompts gefunden.</p>}
           {filtered.map((p) => (
@@ -986,6 +1064,7 @@ function PromptLibrary({
             </div>
           ))}
         </div>
+        )}
       </section>
     </div>
   );
@@ -1303,19 +1382,27 @@ type LearningArea = "overview" | "modules" | "mythos" | "praxisfall";
 
 function LernpfadScreen({
   progress,
+  aiLevel,
   onOpenModule,
   mythAnswers,
   caseChoice,
+  basicsAnswers,
   onMythAnswer,
   onCaseChoice,
+  onBasicsAnswer,
+  onOverview,
   initialArea = "overview"
 }: {
   progress: AppProgress;
+  aiLevel: AiLevel;
   onOpenModule: (id: ModuleId) => void;
   mythAnswers: Record<number, boolean>;
   caseChoice: string | null;
+  basicsAnswers: Record<number, boolean>;
   onMythAnswer: (idx: number, val: boolean) => void;
   onCaseChoice: (id: string) => void;
+  onBasicsAnswer: (idx: number, val: boolean) => void;
+  onOverview: () => void;
   initialArea?: LearningArea;
 }) {
   const [activeArea, setActiveArea] = useState<LearningArea>(initialArea);
@@ -1323,11 +1410,17 @@ function LernpfadScreen({
   const sections = getLearningPathSections(progress.selectedRole ?? "allgemein");
   const recommended = new Set(getRecommendedModules(progress.selectedRole ?? "allgemein"));
   const sectionData = [sections.general, sections.roleSpecific];
+
+  // Level-dependent interactive content (driven by profile.aiLevel)
+  const mythList = mythQuestionsByLevel[aiLevel];
+  const basicsList = basicsQuestionsByLevel[aiLevel];
+  const practiceCase = practiceCaseByLevel[aiLevel];
   const chosen = caseChoice ? practiceCase.options.find((o) => o.id === caseChoice) : null;
 
   if (activeArea === "overview") {
     return (
       <div className="screen-scroll">
+        <OverviewButton onOverview={onOverview} />
         <section className="screen-section" aria-label="Lernbereiche">
           <p className="section-label">Lernbereiche</p>
           <div className="lernen-area-grid">
@@ -1370,6 +1463,48 @@ function LernpfadScreen({
             Zurück zur Übersicht
           </button>
         </div>
+        <section className="screen-section" aria-labelledby="lernen-basics-quiz-heading">
+          <p className="section-label" id="lernen-basics-quiz-heading">Lernfragen für dein Level</p>
+          <p className="lernen-area-intro">
+            Kurze Fragen passend zu deinem KI-Level. Ordne die Aussagen ein und erhalte direkt Feedback.
+          </p>
+          <div className="myth-list" aria-live="polite" aria-relevant="additions">
+            {basicsList.map((q, idx) => {
+              const answered = idx in basicsAnswers;
+              const correct = answered && basicsAnswers[idx] === q.answer;
+              return (
+                <div
+                  key={q.statement}
+                  className={`myth-card${answered ? (correct ? " myth-ok" : " myth-miss") : ""}`}
+                >
+                  <p className="myth-statement">{q.statement}</p>
+                  <div className="myth-btns">
+                    <button
+                      className={`myth-btn${answered && q.answer === true ? " myth-correct-answer" : ""}${answered && basicsAnswers[idx] === true ? " myth-chosen" : ""}`}
+                      onClick={() => !answered && onBasicsAnswer(idx, true)}
+                      disabled={answered}
+                    >
+                      Realität
+                    </button>
+                    <button
+                      className={`myth-btn${answered && q.answer === false ? " myth-correct-answer" : ""}${answered && basicsAnswers[idx] === false ? " myth-chosen" : ""}`}
+                      onClick={() => !answered && onBasicsAnswer(idx, false)}
+                      disabled={answered}
+                    >
+                      Mythos
+                    </button>
+                  </div>
+                  {answered && (
+                    <p className={`myth-feedback${correct ? " fb-ok" : " fb-miss"}`}>
+                      <strong>{correct ? "Richtig. " : "Nicht ganz. "}</strong>
+                      {q.explanation}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
         {sectionData.map((section) => (
           <section className="screen-section" aria-labelledby={`${section.title}-heading`} key={section.title}>
             <h2 className="section-label" id={`${section.title}-heading`}>
@@ -1425,7 +1560,7 @@ function LernpfadScreen({
           <p className="section-label" id="lernen-quiz-heading">Mythos oder Realität?</p>
           <p className="lernen-area-intro">Ordne typische KI-Aussagen ein und erhalte direkt Feedback.</p>
           <div className="myth-list" aria-live="polite" aria-relevant="additions">
-            {mythQuestions.map((q, idx) => {
+            {mythList.map((q, idx) => {
               const answered = idx in mythAnswers;
               const correct = answered && mythAnswers[idx] === q.answer;
               return (
@@ -1591,40 +1726,64 @@ function ModuleDetailScreen({
 
 // ── Praxis ─────────────────────────────────────────────────────────────────────
 
-function PraxisScreen() {
+function PraxisScreen({ onOverview }: { onOverview: () => void }) {
   const [praxisInput, setPraxisInput] = useState("");
   const [praxisResponse, setPraxisResponse] = useState<PraxisInputResponse | null>(null);
+  const [selectedTopic, setSelectedTopic] = useState<PraxisTopicId | null>(null);
+
+  const visibleExamples = selectedTopic
+    ? praxisExamples.filter((ex) => ex.topics.includes(selectedTopic))
+    : [];
 
   return (
     <div className="screen-scroll">
+      <OverviewButton onOverview={onOverview} />
       <section className="screen-section" aria-labelledby="praxis-examples-heading">
         <p className="section-label" id="praxis-examples-heading">
           Praxisbeispiele
         </p>
-        <div className="praxis-examples-list">
-          {praxisExamples.map((ex) => (
-            <div key={ex.id} className="praxis-example-card">
-              <h3 className="praxis-example-title">{ex.title}</h3>
-              <p className="praxis-example-situation">{ex.situation}</p>
-              <div className="praxis-example-section">
-                <span className="praxis-example-label">So kann KI helfen:</span>
-                <p>{ex.kiHelp}</p>
-              </div>
-              <div className="praxis-example-section">
-                <span className="praxis-example-label">Möglicher Prompt:</span>
-                <p className="praxis-example-prompt">{ex.examplePrompt}</p>
-              </div>
-              <div className="praxis-example-section">
-                <span className="praxis-example-label">Grenzen:</span>
-                <p>{ex.kiLimits}</p>
-              </div>
-              <div className="praxis-example-section praxis-example-section--check">
-                <span className="praxis-example-label">Menschliche Prüfung:</span>
-                <p>{ex.humanCheck}</p>
-              </div>
-            </div>
+        <p className="lernen-area-intro">Wähle ein Thema, um passende Praxisbeispiele zu sehen.</p>
+        <div className="praxis-topic-bar" role="group" aria-label="Praxisthemen">
+          {praxisTopics.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`praxis-topic-btn${selectedTopic === t.id ? " active" : ""}`}
+              onClick={() => setSelectedTopic((prev) => (prev === t.id ? null : t.id))}
+              aria-pressed={selectedTopic === t.id}
+            >
+              {t.label}
+            </button>
           ))}
         </div>
+        {selectedTopic === null ? (
+          <p className="praxis-topic-hint">Noch kein Thema gewählt. Wähle oben einen Bereich aus.</p>
+        ) : (
+          <div className="praxis-examples-list">
+            {visibleExamples.map((ex) => (
+              <div key={ex.id} className="praxis-example-card">
+                <h3 className="praxis-example-title">{ex.title}</h3>
+                <p className="praxis-example-situation">{ex.situation}</p>
+                <div className="praxis-example-section">
+                  <span className="praxis-example-label">So kann KI helfen:</span>
+                  <p>{ex.kiHelp}</p>
+                </div>
+                <div className="praxis-example-section">
+                  <span className="praxis-example-label">Möglicher Prompt:</span>
+                  <p className="praxis-example-prompt">{ex.examplePrompt}</p>
+                </div>
+                <div className="praxis-example-section">
+                  <span className="praxis-example-label">Grenzen:</span>
+                  <p>{ex.kiLimits}</p>
+                </div>
+                <div className="praxis-example-section praxis-example-section--check">
+                  <span className="praxis-example-label">Menschliche Prüfung:</span>
+                  <p>{ex.humanCheck}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="screen-section" aria-labelledby="praxis-input-heading">
@@ -1684,12 +1843,13 @@ function PraxisScreen() {
 
 // ── Prüfen ─────────────────────────────────────────────────────────────────────
 
-function PruefenScreen() {
+function PruefenScreen({ onOverview }: { onOverview: () => void }) {
   const [pruefInput, setPruefInput] = useState("");
   const [pruefResult, setPruefResult] = useState<PruefResult | null>(null);
 
   return (
     <div className="screen-scroll">
+      <OverviewButton onOverview={onOverview} />
       <section className="screen-section" aria-labelledby="pruefen-heading">
         <p className="section-label" id="pruefen-heading">
           Fallbezogener Prüfweg
@@ -1785,6 +1945,7 @@ export function App() {
   const [lernenReturnArea, setLernenReturnArea] = useState<LearningArea>("overview");
   const [mythAnswers, setMythAnswers] = useState<Record<number, boolean>>({});
   const [caseChoice, setCaseChoice] = useState<string | null>(null);
+  const [basicsAnswers, setBasicsAnswers] = useState<Record<number, boolean>>({});
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsBtnRef = useRef<HTMLButtonElement>(null);
   const settingsWasOpenRef = useRef(false);
@@ -1920,20 +2081,25 @@ export function App() {
           {tab === "lernen" && (
             <LernpfadScreen
               progress={progress}
+              aiLevel={profile.aiLevel}
               onOpenModule={(id) => { setLernenReturnArea("modules"); setOpenModuleId(id); }}
               mythAnswers={mythAnswers}
               caseChoice={caseChoice}
+              basicsAnswers={basicsAnswers}
               onMythAnswer={(idx, val) => setMythAnswers({ ...mythAnswers, [idx]: val })}
               onCaseChoice={setCaseChoice}
+              onBasicsAnswer={(idx, val) => setBasicsAnswers({ ...basicsAnswers, [idx]: val })}
+              onOverview={() => setTab("home")}
               initialArea={lernenReturnArea}
             />
           )}
-          {tab === "praxis" && <PraxisScreen />}
-          {tab === "pruefen" && <PruefenScreen />}
+          {tab === "praxis" && <PraxisScreen onOverview={() => setTab("home")} />}
+          {tab === "pruefen" && <PruefenScreen onOverview={() => setTab("home")} />}
           {tab === "prompts" && (
             <PromptLibrary
               prompts={state.savedPrompts}
               onPromptsChange={(prompts) => updateState({ ...state, savedPrompts: prompts })}
+              onOverview={() => setTab("home")}
             />
           )}
           {tab === "bakira" && (

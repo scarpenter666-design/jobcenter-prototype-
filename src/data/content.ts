@@ -44,6 +44,16 @@ export type PracticeCase = {
   takeaway: string;
 };
 
+// Local, dependency-free level key (kept compatible with AiLevel in lib/appState
+// to avoid a circular import between content.ts and appState.ts).
+export type AiLevelKey = "einsteiger" | "grundkenntnisse" | "fortgeschritten";
+
+export type MythQuestion = {
+  statement: string;
+  answer: boolean;
+  explanation: string;
+};
+
 export const roles: Role[] = [
   {
     id: "leistung",
@@ -315,6 +325,96 @@ export const mythQuestions = [
   }
 ];
 
+// Level-dependent myth questions for "Mythos oder Realität?".
+// einsteiger reuses the base set above; the other levels go deeper.
+export const mythQuestionsByLevel: Record<AiLevelKey, MythQuestion[]> = {
+  einsteiger: mythQuestions,
+  grundkenntnisse: [
+    {
+      statement: "Ein KI-Entwurf darf ohne weitere Pruefung an Buerger versendet werden.",
+      answer: false,
+      explanation: "Ein Entwurf muss vor dem Versand auf Ton, Datenumfang, Frist und fachliche Richtigkeit geprueft werden."
+    },
+    {
+      statement: "Vor dem Versand sollte ein KI-Text auf Ton, Datenumfang und Frist geprueft werden.",
+      answer: true,
+      explanation: "Diese Pruefschritte sichern Qualitaet und Datenschutz, bevor etwas nach aussen geht."
+    },
+    {
+      statement: "Eine klare Aufgabenbeschreibung im Prompt macht die spaetere Kontrolle einfacher.",
+      answer: true,
+      explanation: "Je klarer Aufgabe und Pruefkriterien, desto leichter laesst sich der Vorschlag bewerten."
+    },
+    {
+      statement: "KI erkennt zuverlaessig, welche Daten im Einzelfall sensibel sind.",
+      answer: false,
+      explanation: "Die Einschaetzung sensibler Daten bleibt Aufgabe der Fachkraft. KI kann das nicht zuverlaessig leisten."
+    }
+  ],
+  fortgeschritten: [
+    {
+      statement: "Die fachliche und rechtliche Letztverantwortung bleibt auch bei KI-Nutzung beim Menschen.",
+      answer: true,
+      explanation: "KI bereitet vor und strukturiert. Entscheidung, Pruefung und Verantwortung liegen bei der Fachkraft."
+    },
+    {
+      statement: "Teamstandards fuer KI-Nutzung muessen Datenschutz, Eskalationswege und Pruefpflichten regeln.",
+      answer: true,
+      explanation: "Klare Leitplanken zu erlaubten Zwecken, verbotenen Daten und Pruefpflicht machen Nutzung sicher."
+    },
+    {
+      statement: "Wenn ein KI-Tool als DSGVO-konform beworben wird, sind eigene Datenschutzpruefungen ueberfluessig.",
+      answer: false,
+      explanation: "Werbeaussagen ersetzen keine eigene Bewertung von Rechtsgrundlage, Datenfluss und Risiko."
+    },
+    {
+      statement: "Automatisierte Letztentscheidungen ueber Leistungen sind im Jobcenter unproblematisch.",
+      answer: false,
+      explanation: "Letztentscheidungen ueber Leistungen brauchen menschliche Pruefung und Dokumentation."
+    }
+  ]
+};
+
+// Level-dependent quick learning questions shown in "KI-Grundlagen für alle".
+export const basicsQuestionsByLevel: Record<AiLevelKey, MythQuestion[]> = {
+  einsteiger: [
+    {
+      statement: "KI ist dasselbe wie ein menschlicher Sachbearbeiter.",
+      answer: false,
+      explanation: "KI erkennt Muster, versteht aber keinen Einzelfall wie eine Fachkraft."
+    },
+    {
+      statement: "Eine KI-Antwort ist zunaechst nur ein Vorschlag.",
+      answer: true,
+      explanation: "Sie ersetzt keine Rechtspruefung, kein Ermessen und keine Dokumentation."
+    }
+  ],
+  grundkenntnisse: [
+    {
+      statement: "Auch ein gut klingender KI-Text kann fachliche Fehler enthalten.",
+      answer: true,
+      explanation: "Fluessige Sprache sagt nichts ueber fachliche Richtigkeit aus. Inhaltliche Pruefung bleibt noetig."
+    },
+    {
+      statement: "Wenn die KI fluessig formuliert, ist der Inhalt sicher korrekt.",
+      answer: false,
+      explanation: "Form und Inhalt sind zwei Dinge. Der Inhalt muss unabhaengig von der Sprache geprueft werden."
+    }
+  ],
+  fortgeschritten: [
+    {
+      statement: "KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext einschaetzen zu koennen.",
+      answer: true,
+      explanation: "Kompetenz ist kontextbezogen: Aufgabe, Risiko und Erfahrung bestimmen den sicheren Einsatz."
+    },
+    {
+      statement: "Datenschutzrisiken muessen erst nach der Einfuehrung eines KI-Tools bewertet werden.",
+      answer: false,
+      explanation: "Risiken werden vor der Nutzung bewertet, nicht erst, wenn bereits Daten verarbeitet wurden."
+    }
+  ]
+};
+
 export const practiceCase: PracticeCase = {
   title: "Praxisfall: KI-Entwurf fuer eine Nachforderung",
   situation:
@@ -342,6 +442,64 @@ export const practiceCase: PracticeCase = {
   takeaway: "KI-Texte sind Arbeitsentwuerfe. Erst Pruefung, dann Nutzung."
 };
 
+// Level-dependent practice case for the "Praxisfall — Lernübung".
+// einsteiger reuses the base case above; the other levels raise the stakes.
+export const practiceCaseByLevel: Record<AiLevelKey, PracticeCase> = {
+  einsteiger: practiceCase,
+  grundkenntnisse: {
+    title: "Praxisfall: KI-Antwort an eine ratsuchende Person",
+    situation:
+      "Eine KI hat eine freundliche Antwort auf eine Buergeranfrage entworfen. Der Text nennt eine konkrete Bearbeitungsdauer und uebernimmt viele persoenliche Angaben aus der Anfrage.",
+    options: [
+      {
+        id: "send",
+        label: "Antwort unveraendert senden, weil sie hoeflich klingt.",
+        feedback: "Nicht sicher. Feste Bearbeitungszusagen und unnoetige persoenliche Angaben sind ein Risiko.",
+        recommended: false
+      },
+      {
+        id: "review",
+        label: "Bearbeitungszusage und Datenumfang pruefen und ueberfluessige Details entfernen.",
+        feedback: "Sicherer Weg. Keine festen Zusagen, nur notwendige Angaben und ein fachlich gepruefter Ton.",
+        recommended: true
+      },
+      {
+        id: "ignore",
+        label: "KI gar nicht fuer Buergerkontakt nutzen.",
+        feedback: "Verstaendlich, aber kontrollierte Nutzung hilft, Entwuerfe schneller und trotzdem sicher zu erstellen.",
+        recommended: false
+      }
+    ],
+    takeaway: "Pruefe Zusagen und Datensparsamkeit, bevor ein KI-Entwurf nach aussen geht."
+  },
+  fortgeschritten: {
+    title: "Praxisfall: Neues KI-Tool im Team einfuehren",
+    situation:
+      "Ein Team moechte ein neues KI-Tool nutzen und ueberlegt, echte Fallnotizen einzugeben, um Zeit zu sparen. Eine klare Regelung dazu gibt es noch nicht.",
+    options: [
+      {
+        id: "start",
+        label: "Sofort mit echten Fallnotizen testen, um den Nutzen zu zeigen.",
+        feedback: "Nicht sicher. Ohne Datenschutzpruefung und Regeln duerfen keine echten Sozialdaten eingegeben werden.",
+        recommended: false
+      },
+      {
+        id: "govern",
+        label: "Erst Zweck, erlaubte Daten, Pruefpflicht und Eskalationsweg klaeren und nur mit fiktiven Daten testen.",
+        feedback: "Sicherer Weg. Governance, Datenschutz und fiktive Testdaten schuetzen Team und Buerger.",
+        recommended: true
+      },
+      {
+        id: "ban",
+        label: "Das Tool grundsaetzlich verbieten.",
+        feedback: "Verstaendlich, aber mit klaren Leitplanken laesst sich der Nutzen kontrolliert erschliessen.",
+        recommended: false
+      }
+    ],
+    takeaway: "Vor der Nutzung: Governance, Datenschutz und fiktive Testdaten klaeren."
+  }
+};
+
 export const checklistItems = [
   { id: "source-check", label: "Quelle oder Fachregel gegenpruefen" },
   { id: "privacy-check", label: "Keine unnoetigen personenbezogenen Details" },
@@ -351,6 +509,8 @@ export const checklistItems = [
 
 // ── Praxis Examples ────────────────────────────────────────────────────────────
 
+export type PraxisTopicId = "leistung" | "integration" | "service" | "leitung" | "kommunikation";
+
 export type PraxisExample = {
   id: string;
   title: string;
@@ -359,7 +519,16 @@ export type PraxisExample = {
   examplePrompt: string;
   kiLimits: string;
   humanCheck: string;
+  topics: PraxisTopicId[];
 };
+
+export const praxisTopics: { id: PraxisTopicId; label: string }[] = [
+  { id: "leistung", label: "Leistungsbereich" },
+  { id: "integration", label: "Markt und Integration" },
+  { id: "service", label: "Eingangszone und Service" },
+  { id: "leitung", label: "Teamleitung" },
+  { id: "kommunikation", label: "Schreiben und Kommunikation" }
+];
 
 export const praxisExamples: PraxisExample[] = [
   {
@@ -369,7 +538,18 @@ export const praxisExamples: PraxisExample[] = [
     kiHelp: "KI kann einen Briefentwurf erstellen: Anlass, benoedigte Unterlagen, Frist und Hinweis auf moegliche Folgen.",
     examplePrompt: "Formuliere eine hoefliche Nachforderung fuer fehlende Einkommensnachweise. Frist 14 Tage. Nur fiktive Angaben verwenden.",
     kiLimits: "KI setzt keine Fristen rechtssicher und kennt keinen echten Einzelfall.",
-    humanCheck: "Rechtsgrundlage, korrekte Frist, Ton und Vollstaendigkeit muessen die Fachkraft pruefen."
+    humanCheck: "Rechtsgrundlage, korrekte Frist, Ton und Vollstaendigkeit muessen die Fachkraft pruefen.",
+    topics: ["leistung", "kommunikation"]
+  },
+  {
+    id: "mitwirkung-pruefen",
+    title: "Mitwirkungsschreiben pruefen",
+    situation: "Ein fiktiver Entwurf fuer ein Mitwirkungsschreiben liegt vor. Frist und benoetigte Nachweise sollen klar und datensparsam benannt sein.",
+    kiHelp: "KI kann den Entwurf auf Vollstaendigkeit, klare Fristnennung und verstaendliche Sprache durchsehen.",
+    examplePrompt: "Pruefe diesen fiktiven Entwurf fuer ein Mitwirkungsschreiben auf Klarheit, Frist und Datensparsamkeit. Benenne konkrete Verbesserungen.",
+    kiLimits: "KI bewertet keine Rechtsfolgen und setzt keine rechtsgueltige Frist.",
+    humanCheck: "Rechtsgrundlage, Angemessenheit der Frist und Folgen bei Nichtvorlage bleiben bei der Fachkraft.",
+    topics: ["leistung"]
   },
   {
     id: "digital-erklaeren",
@@ -378,7 +558,18 @@ export const praxisExamples: PraxisExample[] = [
     kiHelp: "KI kann eine Schritt-fuer-Schritt-Anleitung in einfacher Sprache ohne Fachjargon erstellen.",
     examplePrompt: "Erklaere in drei Schritten, wie man in der Jobcenter-App einen Nachweis hochlaedt. Zielgruppe: Person ohne digitale Vorkenntnisse.",
     kiLimits: "KI kennt keine App-Updates und kann Menuepfade falsch benennen.",
-    humanCheck: "Schritte auf Aktualitaet pruefen. Keine Zusagen ueber Bearbeitungszeiten machen."
+    humanCheck: "Schritte auf Aktualitaet pruefen. Keine Zusagen ueber Bearbeitungszeiten machen.",
+    topics: ["service", "kommunikation"]
+  },
+  {
+    id: "anliegen-einordnen",
+    title: "Anliegen am Empfang einordnen",
+    situation: "In der Eingangszone treffen viele unterschiedliche Anliegen ein. Eine Fachkraft moechte ein fiktives Anliegen schnell und respektvoll sortieren.",
+    kiHelp: "KI kann neutrale Rueckfragen und eine grobe Sortierung nach Antrag, Aenderung, Nachweis oder Termin vorschlagen.",
+    examplePrompt: "Schlage drei neutrale Rueckfragen vor, um ein fiktives Anliegen in der Eingangszone einzuordnen. Keine echten Daten verwenden.",
+    kiLimits: "KI kennt die konkrete Situation nicht und kann dringende oder sensible Faelle nicht erkennen.",
+    humanCheck: "Dringlichkeit und sensible Anliegen muss die Fachkraft selbst einschaetzen.",
+    topics: ["service"]
   },
   {
     id: "kooperationsplan-vorbereiten",
@@ -387,7 +578,38 @@ export const praxisExamples: PraxisExample[] = [
     kiHelp: "KI kann typische Zielfelder und Formulierungsbausteine fuer einen Kooperationsplan vorschlagen.",
     examplePrompt: "Erstelle Formulierungsbausteine fuer einen Kooperationsplan: Ziel, Zwischenschritte, Unterstuetzungsbedarf. Fiktives Beispiel.",
     kiLimits: "KI kennt weder die Person noch ihre Situation. Inhalte brauchen persoenliche Abstimmung im Gespraech.",
-    humanCheck: "Alle Inhalte im Gespraech abstimmen. Nichts ohne Zustimmung uebernehmen."
+    humanCheck: "Alle Inhalte im Gespraech abstimmen. Nichts ohne Zustimmung uebernehmen.",
+    topics: ["integration"]
+  },
+  {
+    id: "foerder-vorsortieren",
+    title: "Foerderoptionen vorsortieren",
+    situation: "Fuer ein fiktives Beratungsbeispiel sollen moegliche Foerderinstrumente als Pruefpunkte sichtbar gemacht werden, ohne eine Entscheidung vorwegzunehmen.",
+    kiHelp: "KI kann bekannte Foerderarten als Checkliste auflisten und passende Pruefpunkte und Rueckfragen vorschlagen.",
+    examplePrompt: "Liste moegliche Foerderinstrumente als Pruefpunkte fuer ein fiktives Integrationsbeispiel auf. Keine Entscheidung, nur Orientierung.",
+    kiLimits: "KI bewertet keine Foerderfaehigkeit und kein Ermessen.",
+    humanCheck: "Eignung, Arbeitsmarktbezug und rechtliche Voraussetzungen muss die Fachkraft pruefen.",
+    topics: ["integration"]
+  },
+  {
+    id: "team-ki-regeln",
+    title: "Teambesprechung zu KI-Regeln vorbereiten",
+    situation: "Eine Teamleitung will eine kurze Besprechung zu sicherer KI-Nutzung vorbereiten: erlaubte Zwecke, verbotene Daten und Pruefpflichten.",
+    kiHelp: "KI kann eine Agenda und eine Diskussionscheckliste fuer Datenschutz, Verantwortung und Lernbedarf entwerfen.",
+    examplePrompt: "Entwirf eine kurze Agenda fuer eine Teambesprechung zu sicherer KI-Nutzung: erlaubte Zwecke, verbotene Daten, Pruefpflicht, Eskalationsweg.",
+    kiLimits: "KI kennt die lokalen Vorgaben, Personalvertretung und Datenschutzlage des Hauses nicht.",
+    humanCheck: "Standards muessen zu lokalen Regeln, Datenschutz und Personalvertretung passen.",
+    topics: ["leitung"]
+  },
+  {
+    id: "absage-formulieren",
+    title: "Verstaendliche Absage formulieren",
+    situation: "Eine ablehnende Mitteilung soll fuer einen fiktiven Fall sachlich, respektvoll und verstaendlich formuliert werden.",
+    kiHelp: "KI kann einen klaren, buergerfreundlichen Entwurf mit Begruendungsstruktur und Hinweis auf weitere Wege vorschlagen.",
+    examplePrompt: "Formuliere eine sachliche, verstaendliche Absage fuer einen fiktiven Fall. Respektvoller Ton, klare Struktur, keine echten Daten.",
+    kiLimits: "KI kennt die rechtliche Begruendung des Einzelfalls nicht und kann sie nicht garantieren.",
+    humanCheck: "Rechtliche Begruendung, Rechtsbehelfsbelehrung und Ton muss die Fachkraft pruefen.",
+    topics: ["kommunikation"]
   }
 ];
 
