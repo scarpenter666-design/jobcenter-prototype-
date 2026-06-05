@@ -54,6 +54,15 @@ export type MythQuestion = {
   explanation: string;
 };
 
+// Real knowledge questions for "KI-Grundlagen für alle" — deliberately NOT
+// myth/reality statements, so this area stays distinct from "Mythos oder Realität?".
+export type BasicsQuestion = {
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+};
+
 export const roles: Role[] = [
   {
     id: "leistung",
@@ -375,42 +384,84 @@ export const mythQuestionsByLevel: Record<AiLevelKey, MythQuestion[]> = {
   ]
 };
 
-// Level-dependent quick learning questions shown in "KI-Grundlagen für alle".
-export const basicsQuestionsByLevel: Record<AiLevelKey, MythQuestion[]> = {
+// Level-dependent real knowledge questions shown in "KI-Grundlagen für alle".
+// These are genuine multiple-choice basics — NOT myth/reality statements — so the
+// area is clearly different from "Mythos oder Realität?".
+export const basicsQuestionsByLevel: Record<AiLevelKey, BasicsQuestion[]> = {
   einsteiger: [
     {
-      statement: "KI ist dasselbe wie ein menschlicher Sachbearbeiter.",
-      answer: false,
-      explanation: "KI erkennt Muster, versteht aber keinen Einzelfall wie eine Fachkraft."
+      question: "Was ist eine KI-Antwort im Arbeitsalltag am ehesten?",
+      options: [
+        "Eine endgueltige Entscheidung",
+        "Ein Vorschlag, den du fachlich pruefst",
+        "Eine rechtsverbindliche Auskunft"
+      ],
+      correctIndex: 1,
+      explanation: "Eine KI-Antwort ist ein Entwurf. Pruefung, Ermessen und Verantwortung bleiben bei der Fachkraft."
     },
     {
-      statement: "Eine KI-Antwort ist zunaechst nur ein Vorschlag.",
-      answer: true,
-      explanation: "Sie ersetzt keine Rechtspruefung, kein Ermessen und keine Dokumentation."
+      question: "Welche Daten darfst du in eine KI-Uebung eingeben?",
+      options: [
+        "Echte Kundendaten aus der Akte",
+        "Nur fiktive oder anonymisierte Beispiele",
+        "Beliebige interne Vermerke"
+      ],
+      correctIndex: 1,
+      explanation: "In Lern- und Demo-Systemen gehoeren keine echten personenbezogenen Daten. Nutze fiktive Beispiele."
     }
   ],
   grundkenntnisse: [
     {
-      statement: "Auch ein gut klingender KI-Text kann fachliche Fehler enthalten.",
-      answer: true,
-      explanation: "Fluessige Sprache sagt nichts ueber fachliche Richtigkeit aus. Inhaltliche Pruefung bleibt noetig."
+      question: "Ein KI-Text klingt fluessig und professionell. Was folgt daraus fuer den Inhalt?",
+      options: [
+        "Der Inhalt ist damit sicher korrekt",
+        "Ueber die fachliche Richtigkeit sagt das nichts aus",
+        "Eine fachliche Pruefung ist ueberfluessig"
+      ],
+      correctIndex: 1,
+      explanation: "Form und Inhalt sind zwei Dinge. Auch ein guter Stil ersetzt keine inhaltliche Pruefung."
     },
     {
-      statement: "Wenn die KI fluessig formuliert, ist der Inhalt sicher korrekt.",
-      answer: false,
-      explanation: "Form und Inhalt sind zwei Dinge. Der Inhalt muss unabhaengig von der Sprache geprueft werden."
+      question: "Was macht eine gute Aufgabenstellung an die KI aus?",
+      options: [
+        "Moeglichst knapp und vage formulieren",
+        "Klare Aufgabe, Kontext und Pruefkriterien angeben",
+        "Keine Vorgaben machen, damit die KI frei arbeitet"
+      ],
+      correctIndex: 1,
+      explanation: "Je klarer Aufgabe, Kontext und Pruefkriterien, desto besser laesst sich das Ergebnis kontrollieren."
     }
   ],
   fortgeschritten: [
     {
-      statement: "KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext einschaetzen zu koennen.",
-      answer: true,
+      question: "Welche Aussage zur KI-Kompetenz trifft am ehesten zu?",
+      options: [
+        "KI-Kompetenz heisst vor allem, jedes Tool technisch bedienen zu koennen.",
+        "KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext einschaetzen zu koennen.",
+        "KI-Kompetenz ist nur fuer die IT-Abteilung relevant."
+      ],
+      correctIndex: 1,
       explanation: "Kompetenz ist kontextbezogen: Aufgabe, Risiko und Erfahrung bestimmen den sicheren Einsatz."
     },
     {
-      statement: "Datenschutzrisiken muessen erst nach der Einfuehrung eines KI-Tools bewertet werden.",
-      answer: false,
+      question: "Wann muessen Datenschutzrisiken eines neuen KI-Tools bewertet werden?",
+      options: [
+        "Erst nach der Einfuehrung im Echtbetrieb",
+        "Vor der Nutzung, bevor Daten verarbeitet werden",
+        "Nur wenn es bereits einen Vorfall gab"
+      ],
+      correctIndex: 1,
       explanation: "Risiken werden vor der Nutzung bewertet, nicht erst, wenn bereits Daten verarbeitet wurden."
+    },
+    {
+      question: "Ein Anbieter bewirbt sein KI-Tool als 'DSGVO-konform'. Was gilt im Jobcenter?",
+      options: [
+        "Eine eigene Datenschutzpruefung ist damit ueberfluessig.",
+        "Eine eigene Bewertung von Rechtsgrundlage, Datenfluss und Risiko bleibt noetig.",
+        "Das Tool darf sofort mit echten Sozialdaten genutzt werden."
+      ],
+      correctIndex: 1,
+      explanation: "Werbeaussagen ersetzen keine eigene Bewertung von Rechtsgrundlage, Datenfluss und Risiko."
     }
   ]
 };

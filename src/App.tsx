@@ -972,6 +972,100 @@ function PromptLibrary({
     );
   }
 
+  const selectedCategoryLabel =
+    PROMPT_CATEGORIES.find((c) => c.id === selectedCategory)?.label ?? "";
+
+  // Detail page for a selected prompt area — opened from the library start view,
+  // with its own back button and the search/grid for that area.
+  if (selectedCategory !== null) {
+    return (
+      <div className="screen-scroll">
+        <OverviewButton onOverview={onOverview} />
+        <section className="screen-section" aria-labelledby="prompts-detail-heading">
+          <div className="prompt-editor-back-row">
+            <button
+              className="btn-secondary prompt-back-btn"
+              onClick={() => setSelectedCategory(null)}
+              aria-label="Zurück zur Prompt-Bibliothek"
+            >
+              <ChevronLeft size={16} aria-hidden="true" />
+              Zurück zur Prompt-Bibliothek
+            </button>
+          </div>
+          <div className="prompt-toolbar">
+            <h2 id="prompts-detail-heading" className="screen-title">
+              {selectedCategoryLabel}
+            </h2>
+            <button ref={newPromptBtnRef} className="btn-primary prompt-new-btn" onClick={openNew}>
+              + Neuer Prompt
+            </button>
+          </div>
+          <label htmlFor="prompt-search" className="sr-only">
+            Prompts suchen
+          </label>
+          <input
+            id="prompt-search"
+            className="text-input prompt-search"
+            type="search"
+            placeholder="Suchen nach Titel, Tag, Abteilung…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Prompts suchen"
+          />
+          <div className="prompt-grid">
+            {filtered.length === 0 && <p className="prompt-empty">Keine Prompts gefunden.</p>}
+            {filtered.map((p) => (
+              <div key={p.id} className="prompt-card">
+                <div className="prompt-card-header">
+                  <span className="prompt-card-title">{p.title}</span>
+                  {p.isBuiltin && <span className="chip-rec">Eingebaut</span>}
+                </div>
+                <p className="prompt-card-text">{p.prompt}</p>
+                {p.tags.length > 0 && (
+                  <div className="tag-row">
+                    {p.tags.map((t) => (
+                      <span key={t} className="tag-chip">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="prompt-card-actions">
+                  <button
+                    className="btn-secondary prompt-action-btn"
+                    onClick={() => copyPrompt(p.prompt)}
+                    aria-label={`${p.title} kopieren`}
+                  >
+                    Nutzen
+                  </button>
+                  {!p.isBuiltin && (
+                    <>
+                      <button
+                        className="btn-secondary prompt-action-btn"
+                        data-prompt-edit-id={p.id}
+                        onClick={(e) => openEdit(p, e)}
+                        aria-label={`${p.title} bearbeiten`}
+                      >
+                        Bearbeiten
+                      </button>
+                      <button
+                        className="btn-secondary prompt-action-btn prompt-action-btn--danger"
+                        onClick={() => deletePrompt(p.id)}
+                        aria-label={`${p.title} loeschen`}
+                      >
+                        Löschen
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="screen-scroll">
       <OverviewButton onOverview={onOverview} />
@@ -985,86 +1079,24 @@ function PromptLibrary({
             + Neuer Prompt
           </button>
         </div>
+        <p className="lernen-area-intro">
+          Wähle einen Bereich, um die passenden Prompts auf einer eigenen Seite zu öffnen.
+        </p>
         <div className="prompt-category-bar" role="group" aria-label="Prompt-Bereiche">
           {PROMPT_CATEGORIES.map((c) => (
             <button
               key={c.id}
               type="button"
-              className={`prompt-category-btn${selectedCategory === c.id ? " active" : ""}`}
-              onClick={() => setSelectedCategory((prev) => (prev === c.id ? null : c.id))}
-              aria-pressed={selectedCategory === c.id}
+              className="prompt-category-btn"
+              onClick={() => {
+                setQuery("");
+                setSelectedCategory(c.id);
+              }}
             >
               {c.label}
             </button>
           ))}
         </div>
-        <label htmlFor="prompt-search" className="sr-only">
-          Prompts suchen
-        </label>
-        <input
-          id="prompt-search"
-          className="text-input prompt-search"
-          type="search"
-          placeholder="Suchen nach Titel, Tag, Abteilung…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Prompts suchen"
-        />
-        {selectedCategory === null ? (
-          <p className="prompt-empty">
-            Wähle oben einen Bereich, um passende Prompts zu sehen.
-          </p>
-        ) : (
-        <div className="prompt-grid">
-          {filtered.length === 0 && <p className="prompt-empty">Keine Prompts gefunden.</p>}
-          {filtered.map((p) => (
-            <div key={p.id} className="prompt-card">
-              <div className="prompt-card-header">
-                <span className="prompt-card-title">{p.title}</span>
-                {p.isBuiltin && <span className="chip-rec">Eingebaut</span>}
-              </div>
-              <p className="prompt-card-text">{p.prompt}</p>
-              {p.tags.length > 0 && (
-                <div className="tag-row">
-                  {p.tags.map((t) => (
-                    <span key={t} className="tag-chip">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <div className="prompt-card-actions">
-                <button
-                  className="btn-secondary prompt-action-btn"
-                  onClick={() => copyPrompt(p.prompt)}
-                  aria-label={`${p.title} kopieren`}
-                >
-                  Nutzen
-                </button>
-                {!p.isBuiltin && (
-                  <>
-                    <button
-                      className="btn-secondary prompt-action-btn"
-                      data-prompt-edit-id={p.id}
-                      onClick={(e) => openEdit(p, e)}
-                      aria-label={`${p.title} bearbeiten`}
-                    >
-                      Bearbeiten
-                    </button>
-                    <button
-                      className="btn-secondary prompt-action-btn prompt-action-btn--danger"
-                      onClick={() => deletePrompt(p.id)}
-                      aria-label={`${p.title} loeschen`}
-                    >
-                      Löschen
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-        )}
       </section>
     </div>
   );
@@ -1114,7 +1146,7 @@ function BakiraWorkspaceScreen({ onBack }: { onBack: () => void }) {
             onClick={onBack}
             aria-label="Zurück zur Übersicht"
           >
-            <ChevronLeft size={16} aria-hidden="true" />
+            <House size={16} aria-hidden="true" />
             Übersicht
           </button>
           <div className="bakira-ws-title-row">
@@ -1407,10 +1439,10 @@ function LernpfadScreen({
   onOpenModule: (id: ModuleId) => void;
   mythAnswers: Record<number, boolean>;
   caseChoice: string | null;
-  basicsAnswers: Record<number, boolean>;
+  basicsAnswers: Record<number, number>;
   onMythAnswer: (idx: number, val: boolean) => void;
   onCaseChoice: (id: string) => void;
-  onBasicsAnswer: (idx: number, val: boolean) => void;
+  onBasicsAnswer: (idx: number, val: number) => void;
   onOverview: () => void;
   initialArea?: LearningArea;
 }) {
@@ -1467,9 +1499,9 @@ function LernpfadScreen({
     return (
       <div className="screen-scroll">
         <div className="lernen-area-back-row">
-          <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zur Übersicht">
+          <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zum Lernbereich">
             <ChevronLeft size={16} aria-hidden="true" />
-            Zurück zur Übersicht
+            Zurück zum Lernbereich
           </button>
         </div>
         <section className="screen-section" aria-labelledby="lernen-basics-quiz-heading">
@@ -1478,34 +1510,31 @@ function LernpfadScreen({
           <p className="lernen-area-intro">
             Kurze Fragen passend zu deinem KI-Level. Ordne die Aussagen ein und erhalte direkt Feedback.
           </p>
-          <div className="myth-list" aria-live="polite" aria-relevant="additions">
+          <div className="basics-quiz" aria-live="polite" aria-relevant="additions">
             {basicsList.map((q, idx) => {
               const answered = idx in basicsAnswers;
-              const correct = answered && basicsAnswers[idx] === q.answer;
+              const chosen = basicsAnswers[idx];
+              const correct = answered && chosen === q.correctIndex;
               return (
                 <div
-                  key={q.statement}
-                  className={`myth-card${answered ? (correct ? " myth-ok" : " myth-miss") : ""}`}
+                  key={q.question}
+                  className={`basics-card${answered ? (correct ? " basics-ok" : " basics-miss") : ""}`}
                 >
-                  <p className="myth-statement">{q.statement}</p>
-                  <div className="myth-btns">
-                    <button
-                      className={`myth-btn${answered && q.answer === true ? " myth-correct-answer" : ""}${answered && basicsAnswers[idx] === true ? " myth-chosen" : ""}`}
-                      onClick={() => !answered && onBasicsAnswer(idx, true)}
-                      disabled={answered}
-                    >
-                      Realität
-                    </button>
-                    <button
-                      className={`myth-btn${answered && q.answer === false ? " myth-correct-answer" : ""}${answered && basicsAnswers[idx] === false ? " myth-chosen" : ""}`}
-                      onClick={() => !answered && onBasicsAnswer(idx, false)}
-                      disabled={answered}
-                    >
-                      Mythos
-                    </button>
+                  <p className="basics-question">{q.question}</p>
+                  <div className="basics-options">
+                    {q.options.map((opt, oi) => (
+                      <button
+                        key={opt}
+                        className={`basics-option${answered && oi === q.correctIndex ? " basics-correct-answer" : ""}${answered && chosen === oi ? " basics-chosen" : ""}`}
+                        onClick={() => !answered && onBasicsAnswer(idx, oi)}
+                        disabled={answered}
+                      >
+                        {opt}
+                      </button>
+                    ))}
                   </div>
                   {answered && (
-                    <p className={`myth-feedback${correct ? " fb-ok" : " fb-miss"}`}>
+                    <p className={`basics-feedback${correct ? " fb-ok" : " fb-miss"}`}>
                       <strong>{correct ? "Richtig. " : "Nicht ganz. "}</strong>
                       {q.explanation}
                     </p>
@@ -1561,9 +1590,9 @@ function LernpfadScreen({
     return (
       <div className="screen-scroll">
         <div className="lernen-area-back-row">
-          <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zur Übersicht">
+          <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zum Lernbereich">
             <ChevronLeft size={16} aria-hidden="true" />
-            Zurück zur Übersicht
+            Zurück zum Lernbereich
           </button>
         </div>
         <section className="screen-section" aria-labelledby="lernen-quiz-heading">
@@ -1614,9 +1643,9 @@ function LernpfadScreen({
   return (
     <div className="screen-scroll">
       <div className="lernen-area-back-row">
-        <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zur Übersicht">
+        <button className="lernen-back-btn" onClick={() => setActiveArea("overview")} aria-label="Zurück zum Lernbereich">
           <ChevronLeft size={16} aria-hidden="true" />
-          Zurück zur Übersicht
+          Zurück zum Lernbereich
         </button>
       </div>
       <section className="screen-section" aria-labelledby="lernen-case-heading">
@@ -1745,31 +1774,30 @@ function PraxisScreen({ onOverview }: { onOverview: () => void }) {
   const visibleExamples = selectedTopic
     ? praxisExamples.filter((ex) => ex.topics.includes(selectedTopic))
     : [];
+  const selectedTopicLabel = selectedTopic
+    ? praxisTopics.find((t) => t.id === selectedTopic)?.label ?? ""
+    : "";
 
-  return (
-    <div className="screen-scroll">
-      <OverviewButton onOverview={onOverview} />
-      <section className="screen-section" aria-labelledby="praxis-examples-heading">
-        <p className="section-label" id="praxis-examples-heading">
-          Praxisbeispiele
-        </p>
-        <p className="lernen-area-intro">Wähle ein Thema, um passende Praxisbeispiele zu sehen.</p>
-        <div className="praxis-topic-bar" role="group" aria-label="Praxisthemen">
-          {praxisTopics.map((t) => (
+  // Detail page for a selected topic — opened from the start selection, with its
+  // own back button, analogous to the learning area.
+  if (selectedTopic !== null) {
+    return (
+      <div className="screen-scroll">
+        <OverviewButton onOverview={onOverview} />
+        <section className="screen-section" aria-labelledby="praxis-detail-heading">
+          <div className="lernen-area-back-row">
             <button
-              key={t.id}
-              type="button"
-              className={`praxis-topic-btn${selectedTopic === t.id ? " active" : ""}`}
-              onClick={() => setSelectedTopic((prev) => (prev === t.id ? null : t.id))}
-              aria-pressed={selectedTopic === t.id}
+              className="lernen-back-btn"
+              onClick={() => setSelectedTopic(null)}
+              aria-label="Zurück zum Praxisbereich"
             >
-              {t.label}
+              <ChevronLeft size={16} aria-hidden="true" />
+              Zurück zum Praxisbereich
             </button>
-          ))}
-        </div>
-        {selectedTopic === null ? (
-          <p className="praxis-topic-hint">Noch kein Thema gewählt. Wähle oben einen Bereich aus.</p>
-        ) : (
+          </div>
+          <h2 className="section-label" id="praxis-detail-heading">
+            {selectedTopicLabel}
+          </h2>
           <div className="praxis-examples-list">
             {visibleExamples.map((ex) => (
               <div key={ex.id} className="praxis-example-card">
@@ -1794,7 +1822,31 @@ function PraxisScreen({ onOverview }: { onOverview: () => void }) {
               </div>
             ))}
           </div>
-        )}
+        </section>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-scroll">
+      <OverviewButton onOverview={onOverview} />
+      <section className="screen-section" aria-labelledby="praxis-examples-heading">
+        <p className="section-label" id="praxis-examples-heading">
+          Praxisbeispiele
+        </p>
+        <p className="lernen-area-intro">Wähle ein Thema, um die passenden Praxisbeispiele auf einer eigenen Seite zu öffnen.</p>
+        <div className="praxis-topic-bar" role="group" aria-label="Praxisthemen">
+          {praxisTopics.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className="praxis-topic-btn"
+              onClick={() => setSelectedTopic(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="screen-section" aria-labelledby="praxis-input-heading">
@@ -1956,7 +2008,7 @@ export function App() {
   const [lernenReturnArea, setLernenReturnArea] = useState<LearningArea>("overview");
   const [mythAnswers, setMythAnswers] = useState<Record<number, boolean>>({});
   const [caseChoice, setCaseChoice] = useState<string | null>(null);
-  const [basicsAnswers, setBasicsAnswers] = useState<Record<number, boolean>>({});
+  const [basicsAnswers, setBasicsAnswers] = useState<Record<number, number>>({});
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsBtnRef = useRef<HTMLButtonElement>(null);
   const settingsWasOpenRef = useRef(false);
@@ -1971,6 +2023,14 @@ export function App() {
   function updateState(next: AppState) {
     setState(next);
     saveAppState(next);
+  }
+
+  // Navigating to a main tab via the sidebar / bottom nav always starts at that
+  // area's entry view. For "lernen" that means the three-card start selection,
+  // never a previously opened sub-page.
+  function navigateTab(next: Tab) {
+    if (next === "lernen") setLernenReturnArea("overview");
+    setTab(next);
   }
 
   const progress: AppProgress = {
@@ -2078,7 +2138,7 @@ export function App() {
       />
 
       <div className="app-body">
-        <DesktopNav activeTab={tab} onTab={setTab} />
+        <DesktopNav activeTab={tab} onTab={navigateTab} />
 
         <main className="screen-main" id="main-content">
           {tab === "home" && (
@@ -2086,7 +2146,7 @@ export function App() {
               progress={progress}
               firstName={profile.firstName}
               aiLevel={profile.aiLevel}
-              onNavigate={setTab}
+              onNavigate={navigateTab}
             />
           )}
           {tab === "lernen" && (
@@ -2122,7 +2182,7 @@ export function App() {
       <BottomNav
         activeTab={tab}
         doneCount={state.progress.completedModules.length}
-        onTab={setTab}
+        onTab={navigateTab}
       />
 
     </div>

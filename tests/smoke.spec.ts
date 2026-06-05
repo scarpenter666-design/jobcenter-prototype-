@@ -153,7 +153,7 @@ test.describe("Learning flow", () => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
     await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
     await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toBeVisible();
-    await page.getByRole("button", { name: /Zurück zur Übersicht/ }).click();
+    await page.getByRole("button", { name: /Zurück zum Lernbereich/ }).click();
     await expect(page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ })).toBeVisible();
   });
 
@@ -941,4 +941,91 @@ test("dark theme active desktop navigation uses white text for rot, gruen and bl
       `${color} active desktop nav text color`
     ).toHaveCSS("color", "rgb(255, 255, 255)");
   }
+});
+
+// ── Lern-, Praxis-, Prompt-Navigation Rework (2026-06-05) ──────────────────────
+
+test("KI-Grundlagen für alle shows real basics questions and no Mythos/Realität buttons", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await expect(page.getByText(/Lernfragen für dein Level/)).toBeVisible();
+  await expect(page.locator(".basics-card").first()).toBeVisible();
+  // The myth/reality answer buttons must not appear in the basics quiz anymore.
+  await expect(page.locator(".basics-quiz").getByRole("button", { name: "Mythos", exact: true })).toHaveCount(0);
+  await expect(page.locator(".basics-quiz").getByRole("button", { name: "Realität", exact: true })).toHaveCount(0);
+});
+
+test("KI-Grundlagen questions differ between einsteiger and fortgeschritten", async ({ page }) => {
+  // Low score → einsteiger: easy basics, no advanced governance question.
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await expect(page.getByText(/Was ist eine KI-Antwort im Arbeitsalltag/)).toBeVisible();
+  await expect(page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen/)).toHaveCount(0);
+
+  // High score → fortgeschritten: advanced basics, no einsteiger question.
+  await completeOnboardingHighScore(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await expect(page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen/)).toBeVisible();
+  await expect(page.getByText(/Was ist eine KI-Antwort im Arbeitsalltag/)).toHaveCount(0);
+});
+
+test("clicking Lernen in the nav always returns to the start selection", async ({ page }) => {
+  await completeOnboarding(page);
+  // Open Lernen → KI-Grundlagen → a module → back: now sitting in the modules sub-page.
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await page.getByRole("button", { name: /KI einfach erklaert/ }).click();
+  await page.getByRole("button", { name: "Zurück zum Lernpfad" }).click();
+  await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toBeVisible();
+  // Navigate away and back via the sidebar — must reset to the three-card start.
+  await page.getByRole("button", { name: "Prüfen" }).click();
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await expect(page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Mythos oder Realität öffnen/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toHaveCount(0);
+});
+
+test("Lern sub-pages use 'Zurück zum Lernbereich' back button", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Lernen", exact: true }).click();
+  await page.getByRole("button", { name: /Mythos oder Realität öffnen/ }).click();
+  await expect(page.getByRole("button", { name: "Zurück zum Lernbereich" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Zurück zur Übersicht/ })).toHaveCount(0);
+});
+
+test("Praxis topic opens a detail page with a back button to the Praxisbereich", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Praxis" }).click();
+  await expect(page.locator(".praxis-example-card")).toHaveCount(0);
+  await page.getByRole("button", { name: "Leistungsbereich" }).click();
+  await expect(page.locator(".praxis-example-card").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Zurück zum Praxisbereich" })).toBeVisible();
+  await page.getByRole("button", { name: "Zurück zum Praxisbereich" }).click();
+  await expect(page.locator(".praxis-topic-bar")).toBeVisible();
+  await expect(page.locator(".praxis-example-card")).toHaveCount(0);
+});
+
+test("Prompt area opens a detail page with a back button to the Prompt-Bibliothek", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "Prompts" }).click();
+  await expect(page.locator(".prompt-card")).toHaveCount(0);
+  await page.getByRole("button", { name: "Datenschutz und Sicherheit" }).click();
+  await expect(page.locator(".prompt-card").first()).toBeVisible();
+  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  await page.getByRole("button", { name: "Zurück zur Prompt-Bibliothek" }).click();
+  await expect(page.locator(".prompt-category-bar")).toBeVisible();
+  await expect(page.locator(".prompt-card")).toHaveCount(0);
+});
+
+test("BAKIRA Übersicht button uses the house icon, not a chevron", async ({ page }) => {
+  await completeOnboarding(page);
+  await page.getByRole("button", { name: "BAKIRA", exact: true }).click();
+  const backBtn = page.locator(".bakira-ws-back");
+  await expect(backBtn).toBeVisible();
+  await expect(backBtn).toContainText("Übersicht");
+  await expect(backBtn.locator("svg.lucide-house")).toBeAttached();
+  await expect(backBtn.locator("svg.lucide-chevron-left")).toHaveCount(0);
 });

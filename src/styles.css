@@ -809,6 +809,79 @@ body {
 .myth-feedback.fb-ok  { background: var(--success-light); color: var(--success); }
 .myth-feedback.fb-miss { background: var(--warn-light);   color: var(--warn);    }
 
+/* ── KI-Grundlagen quiz (multiple choice, distinct from Mythos/Realität) ── */
+.basics-quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.basics-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.basics-question {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.basics-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.basics-option {
+  min-height: 44px;
+  padding: 10px 14px;
+  text-align: left;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.basics-option:disabled { cursor: not-allowed; }
+
+.basics-option.basics-correct-answer {
+  background: var(--success-light);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.basics-option.basics-correct-answer:not(.basics-chosen) {
+  opacity: 0.7;
+}
+
+.basics-option.basics-chosen:not(.basics-correct-answer) {
+  background: var(--warn-light);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.basics-feedback {
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.basics-feedback.fb-ok  { background: var(--success-light); color: var(--success); }
+.basics-feedback.fb-miss { background: var(--warn-light);   color: var(--warn);    }
+
 /* ── Practice case ───────────────────────────────────────────── */
 .case-card {
   background: var(--surface);

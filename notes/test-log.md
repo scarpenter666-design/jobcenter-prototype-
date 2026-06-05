@@ -186,3 +186,81 @@ Damit die Level-Anpassung unmissverständlich sichtbar ist, wurde ein **KI-Level
 - Nur `src/App.tsx`, `src/styles.css`, `tests/smoke.spec.ts`, `notes/test-log.md` geändert; Vitest/JOB-APP-17 unangetastet.
 - Badge spiegelt `profile.aiLevel`; keine Regression (68/68 grün).
 - Kernfeatures waren bereits vorhanden; dieser Commit ergänzt nur die sichtbare Level-Kennzeichnung.
+
+## 2026-06-03 — Codex Review: JOB-APP-18
+
+Review-Ergebnis: keine Findings.
+
+Geprüft:
+
+- Commit-Historie: `main` enthält JOB-APP-16, JOB-APP-17 und JOB-APP-18; `main` ist 3 Commits vor `origin/main`.
+- Scope: JOB-APP-18-Commit ändert `src/App.tsx`, `src/styles.css`, `tests/smoke.spec.ts`, `notes/test-log.md` und das JOB-APP-18-Handoff. Keine Dependency- oder Build-Config-Änderung im JOB-APP-18-Commit.
+- Sichtbarkeits-Fix: `LevelBadge` zeigt in den Lernbereichen sichtbar „Angepasst an dein KI-Level: <Level>“.
+- E2E-Abdeckung: Badge-Test prüft Low-Score `Einsteiger` und High-Score `Fortgeschritten`; bestehende Tests prüfen unterschiedliche Fragen, Kategorie-Gating, Übersicht-Buttons und Dark-Nav-Farbe.
+- `npm test` → exit 0, 46/46 Unit-Tests grün.
+- `npm run build` → exit 0, Build erfolgreich.
+- `npm audit --audit-level=moderate` → exit 0, 0 vulnerabilities.
+- `npm run test:e2e` → exit 0, 68/68 E2E-Tests grün.
+- `git diff --check` → exit 0.
+- `git status --short` vor Review-Log → sauber.
+
+Wichtiger Hinweis:
+
+- Die App ist lokal korrekt auf `main`, aber `origin/main` steht weiterhin auf `88de9a6` vor JOB-APP-16. Eine deployte GitHub-Pages-Version zeigt daher bis zum Push/Deploy noch den alten Stand.
+
+## 2026-06-05 — Claude Builder-Log: Lern-/Praxis-/Prompt-Navigation-Rework
+
+Handoff umgesetzt: `handoffs/2026-06-05-codex-to-claude-job-app-learning-praxis-prompts-navigation-rework.md`.
+
+### Geänderte Dateien
+
+- `src/data/content.ts`
+  - Neuer Typ `BasicsQuestion` (Frage + Multiple-Choice-Optionen + korrekter Index + Erklärung).
+  - `basicsQuestionsByLevel` von Mythos-/Realität-Aussagen auf **echte Grundlagenfragen** umgestellt, level-abhängig (einsteiger: leichte Grundbegriffe/Einstiegsregeln; grundkenntnisse: Prüfschritte/gute Aufgabenformulierung; fortgeschritten: Datenschutz/Governance, Anbieterzusagen). `fortgeschritten` enthält weiterhin die Phrase „KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext…" (als korrekte Option) → bestehender Test stabil.
+- `src/App.tsx`
+  - Punkt 1: `KI-Grundlagen für alle` rendert jetzt ein Multiple-Choice-Quiz (`.basics-quiz`/`.basics-card`/`.basics-option`) statt der „Realität/Mythos"-Buttons. `basicsAnswers`-State `Record<number, boolean>` → `Record<number, number>` (gewählter Optionsindex); Prop-Typen entsprechend.
+  - Punkt 2: Neuer `navigateTab`-Handler — Klick auf `Lernen` in Desktop-/Mobile-Nav und Home-Schnellzugriff setzt den internen Lern-Unterbereich (`lernenReturnArea`) auf `overview` zurück. Modul-Zurück-Flow (`onBack`) unverändert.
+  - Punkt 3: Zurück-Buttons der drei Lern-Unterseiten von „Zurück zur Übersicht" → „Zurück zum Lernbereich" (Text + `aria-label`).
+  - Punkt 4: `PraxisScreen` — Themen öffnen eine eigene Detailseite (`Zurück zum Praxisbereich` + Übersicht-Button), Startansicht zeigt nur Themenauswahl + Eingabefeld; keine Inline-Kacheln mehr.
+  - Punkt 5: `PromptLibrary` — Bereiche öffnen eigene Detailseite (`Zurück zur Prompt-Bibliothek` + Suche + Grid). Startansicht: Generator + „+ Neuer Prompt" + Bereichsauswahl. Generator/Eigene Prompts/CRUD/Suche unverändert funktionsfähig; Speichern springt auf „Alle Prompts"-Detail.
+  - Punkt 6: BAKIRA `Übersicht`-Button — Chevron durch `House`-Icon ersetzt, Text/`aria-label` unverändert.
+- `src/styles.css`
+  - Styles für `.basics-quiz`/`.basics-card`/`.basics-question`/`.basics-options`/`.basics-option`(+ correct/chosen/miss)/`.basics-feedback`.
+- `tests/smoke.spec.ts`
+  - Bestehender Lern-Test auf „Zurück zum Lernbereich" angepasst.
+  - Neue Tests: Basics ohne Mythos-/Realität-Antwortbuttons; Basics einsteiger vs. fortgeschritten unterschiedlich; Sidebar-Klick auf `Lernen` setzt auf Startauswahl zurück; Lern-Zurück-Text; Praxis-Detail + Backbutton; Prompt-Detail + Backbutton; BAKIRA Haus-Icon statt Chevron.
+
+### Kommandos
+
+- `npm run build` (`tsc -b && vite build`) → exit 0, keine TS-Fehler.
+- `npm test` (`vitest run src`) → exit 0, 46/46 Unit-Tests grün.
+- `npm run test:e2e` (`playwright test`) → exit 0, **75/75 E2E-Tests grün** (7 neue Tests).
+- `npm audit --audit-level=moderate` → exit 0, **0 vulnerabilities** (Vitest-4-Basis intakt).
+- `git status --short` → nur Scope-Dateien geändert (`App.tsx`, `content.ts`, `styles.css`, `smoke.spec.ts`, `test-log.md`) + Handoff untracked.
+
+### QA-Hinweise (sichtbar)
+
+- Akzeptanzkriterien des Handoffs sind durch E2E mit frischem `localStorage` (low-/high-Score-Onboarding) abgedeckt: Lern-Startauswahl, level-adaptive Grundlagenfragen ohne Mythos-Framing, Sidebar-Reset, Praxis-/Prompt-Detailseiten mit passenden Backbuttons, BAKIRA-Haus-Icon.
+- Keine neuen Packages. Vitest/JOB-APP-17 unangetastet.
+
+### Offener Hinweis an Sven
+
+- Damit die Änderungen sichtbar werden, muss `main` nach `origin/main` gepusht werden (löst GitHub-Pages-Deploy aus). Beim lokalen Testen: harter Reload + `localStorage` leeren, sonst bleibt das alte Profil/Level aktiv.
+
+## 2026-06-05 — Codex Nachprüfung nach Claude
+
+Review-Ergebnis: Handoff im Wesentlichen umgesetzt; ein kleiner Nachfix wurde durch Codex ergänzt.
+
+Nachfix:
+
+- `src/App.tsx`: Backbutton in `Lernen -> Praxisfallbeispiele` von `Zurück zur Übersicht` auf `Zurück zum Lernbereich` geändert (Text + `aria-label`). Claude hatte die anderen Lern-Unterseiten bereits angepasst.
+
+Verifikation:
+
+- `npm test` → exit 0, 46/46 Unit-Tests grün.
+- `npm run build` → exit 0, Build erfolgreich.
+- `npm run test:e2e` → exit 0, 75/75 E2E-Tests grün.
+
+Hinweis:
+
+- Erste Sandbox-Läufe von `npm test`/`npm run build` scheiterten mit Vite/esbuild `spawn EPERM`; außerhalb der Sandbox liefen beide Kommandos erfolgreich.
