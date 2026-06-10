@@ -13,12 +13,14 @@
     --teal: #0ab08e;
     --teal-light: #e6f8f4;
     --warm: #e67e22;
+    --warm-light: #fdf1e3;
     --bg: #f0f4f8;
     --text: #1a202c;
     --muted: #5b6b7f;
     --white: #ffffff;
     --grad: linear-gradient(135deg, #1b3f6e 0%, #2563a8 60%, #0ab08e 100%);
   }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     background: #d0d7e2;
@@ -26,7 +28,7 @@
     line-height: 1.55;
   }
   .wrap {
-    max-width: 920px;
+    max-width: 980px;
     margin: 0 auto;
     background: var(--white);
     box-shadow: 0 6px 30px rgba(0,0,0,0.18);
@@ -51,21 +53,70 @@
     margin-bottom: 16px;
   }
   header h1 { font-size: 30px; font-weight: 800; line-height: 1.15; margin-bottom: 10px; }
-  header p { font-size: 15px; font-weight: 300; opacity: 0.92; max-width: 640px; }
+  header p { font-size: 15px; font-weight: 300; opacity: 0.92; max-width: 680px; }
 
   /* ── Inhalt ── */
   main { padding: 34px 40px 16px; }
-  section { margin-bottom: 30px; }
+  section { margin-bottom: 38px; scroll-margin-top: 18px; }
   h2 {
-    font-size: 19px; color: var(--blue-dark); font-weight: 800;
-    margin-bottom: 6px;
+    font-size: 20px; color: var(--blue-dark); font-weight: 800;
+    margin-bottom: 8px;
     display: flex; align-items: center; gap: 9px;
   }
   h2::after { content: ""; flex: 1; height: 2px; background: var(--teal); border-radius: 2px; opacity: 0.35; }
+  h3 { font-size: 15.5px; color: var(--blue-dark); margin: 18px 0 6px; }
+  h4 { font-size: 14px; color: var(--blue-dark); margin: 12px 0 4px; }
+  p { font-size: 14px; margin-bottom: 10px; }
   .lead { color: var(--muted); font-size: 14.5px; margin-bottom: 14px; }
+  ul.plain, ol.plain { margin: 0 0 12px 20px; font-size: 14px; }
+  ul.plain li, ol.plain li { margin-bottom: 5px; }
+  strong { color: var(--blue-dark); }
+  em { color: var(--muted); }
+  .ui { font-weight: 700; color: var(--blue-dark); white-space: nowrap; }
 
-  /* ── Schnellstart ── */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  /* ── Inhaltsverzeichnis ── */
+  .toc {
+    background: var(--bg); border-radius: 12px; padding: 18px 22px;
+    border-left: 4px solid var(--blue-mid);
+  }
+  .toc ol { margin: 4px 0 0 20px; font-size: 14px; columns: 2; column-gap: 36px; }
+  .toc li { margin-bottom: 6px; break-inside: avoid; }
+  .toc a { color: var(--blue-mid); text-decoration: none; font-weight: 600; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Info-Kästen ── */
+  .box {
+    border-radius: 10px; padding: 13px 16px; margin: 12px 0;
+    font-size: 13.5px;
+  }
+  .box p:last-child { margin-bottom: 0; }
+  .box-why  { background: var(--blue-light); border-left: 4px solid var(--blue-mid); }
+  .box-out  { background: var(--teal-light); border-left: 4px solid var(--teal); }
+  .box-warn { background: var(--warm-light); border-left: 4px solid var(--warm); }
+  .box .box-title {
+    display: block; font-size: 11.5px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .box-why  .box-title { color: var(--blue-mid); }
+  .box-out  .box-title { color: #0a8a70; }
+  .box-warn .box-title { color: #c4690c; }
+
+  /* ── Tabellen ── */
+  table {
+    width: 100%; border-collapse: collapse; margin: 10px 0 16px;
+    font-size: 13px;
+  }
+  th {
+    text-align: left; background: var(--blue-light); color: var(--blue-dark);
+    padding: 8px 11px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  td { padding: 8px 11px; border-bottom: 1px solid #e6ebf2; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 700; color: var(--blue-dark); white-space: nowrap; }
+  table.wide-first td:first-child { white-space: normal; min-width: 150px; }
+
+  /* ── Schritt-Liste ── */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 12px 0; }
   .step {
     background: var(--bg); border-radius: 10px; padding: 16px 18px;
     border-top: 3px solid var(--teal);
@@ -75,29 +126,29 @@
     background: var(--teal); color: white; font-weight: 800; font-size: 13px;
     display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
   }
-  .step h3 { font-size: 14px; color: var(--blue-dark); margin-bottom: 3px; }
-  .step p { font-size: 12.5px; color: var(--muted); }
+  .step h3 { font-size: 14px; color: var(--blue-dark); margin: 0 0 3px; }
+  .step p { font-size: 12.5px; color: var(--muted); margin: 0; }
 
-  /* ── Bereiche ── */
-  .areas { display: flex; flex-direction: column; gap: 11px; }
+  /* ── Bereichs-Kärtchen ── */
+  .areas { display: flex; flex-direction: column; gap: 11px; margin: 12px 0; }
   .area {
     display: flex; gap: 14px; align-items: flex-start;
     background: var(--bg); border-radius: 10px; padding: 14px 18px;
     border-left: 4px solid var(--blue-mid);
   }
   .area .ico { font-size: 22px; flex-shrink: 0; line-height: 1.4; }
-  .area h3 { font-size: 14.5px; color: var(--blue-dark); margin-bottom: 2px; }
-  .area p { font-size: 13px; color: var(--muted); }
+  .area h3 { font-size: 14.5px; color: var(--blue-dark); margin: 0 0 2px; }
+  .area p { font-size: 13px; color: var(--muted); margin: 0; }
   .area.teal { border-left-color: var(--teal); }
   .area.warm { border-left-color: var(--warm); }
 
-  /* ── Einstellungen ── */
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .mini {
-    background: var(--white); border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px 18px;
+  /* ── FAQ ── */
+  .faq { display: flex; flex-direction: column; gap: 10px; }
+  .faq-item {
+    background: var(--bg); border-radius: 10px; padding: 13px 17px;
   }
-  .mini h3 { font-size: 13.5px; color: var(--blue-dark); margin-bottom: 3px; }
-  .mini p { font-size: 12.5px; color: var(--muted); }
+  .faq-item .q { font-weight: 800; font-size: 13.5px; color: var(--blue-dark); margin-bottom: 4px; }
+  .faq-item .a { font-size: 13px; color: var(--text); margin: 0; }
 
   /* ── Datenschutz-Box ── */
   .privacy {
@@ -109,6 +160,25 @@
   .privacy ul { list-style: none; margin-top: 6px; }
   .privacy li { font-size: 13px; color: #14532d; padding: 3px 0 3px 22px; position: relative; }
   .privacy li::before { content: "🔒"; position: absolute; left: 0; font-size: 12px; }
+
+  /* ── Beispiel-Block ── */
+  .example {
+    background: #f7f9fc; border: 1px dashed #c3cfdd; border-radius: 10px;
+    padding: 12px 16px; margin: 10px 0; font-size: 13px;
+  }
+  .example .ex-title {
+    font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--muted); display: block; margin-bottom: 5px;
+  }
+  .example pre {
+    font-family: Consolas, 'Courier New', monospace; font-size: 12.5px;
+    white-space: pre-wrap; line-height: 1.5; color: var(--text);
+  }
+
+  /* ── Seitenanfang-Link ── */
+  .top-link { display: block; text-align: right; font-size: 12px; margin-top: 10px; }
+  .top-link a { color: var(--muted); text-decoration: none; }
+  .top-link a:hover { color: var(--blue-mid); }
 
   /* ── Fuß ── */
   footer {
@@ -129,136 +199,910 @@
     header { padding: 28px 22px; }
     main { padding: 26px 22px 8px; }
     header h1 { font-size: 24px; }
-    .steps, .two { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
     footer { padding: 24px 22px 30px; }
+    td:first-child { white-space: normal; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="seitenanfang">
 
   <header>
     <img src="./jobcenter-harburg-logo.png" alt="Jobcenter Harburg">
     <span class="tag">Gebrauchsanleitung · Klickdummy · Demo</span>
     <h1>Digital souverän im Jobcenter</h1>
-    <p>Kurzanleitung zum Klickdummy: was die einzelnen Bereiche tun und wie du sie nutzt.
-       Dies ist eine Idee zur Veranschaulichung – kein fertiges Produkt, kein Login.</p>
+    <p>Die ausführliche Anleitung zum Klickdummy: Bereich für Bereich erklärt — was du wo
+       machen kannst, was dabei herauskommt, warum es diesen Bereich gibt und was die
+       einzelnen Auswahlfelder bedeuten. Dies ist eine Idee zur Veranschaulichung –
+       kein fertiges Produkt, kein Login.</p>
   </header>
 
   <main>
 
-    <section>
-      <h2>Was ist das?</h2>
+    <!-- ────────────────────────── 1. Was ist das? ────────────────────────── -->
+    <section id="was-ist-das">
+      <h2>1. Was ist diese App?</h2>
       <p class="lead">
-        Eine Lern-Web-App für Mitarbeitende, die zeigt, wie man KI und Digitalisierung im
-        Arbeitsalltag sicher, kritisch und kompetent nutzt. Sie läuft komplett im Browser –
-        ohne Anmeldung, ohne Server. Alle Inhalte sind Demo-Beispiele, es werden
-        <strong>keine echten Kundendaten</strong> verwendet.
+        Eine Lern-Web-App für Mitarbeitende des Jobcenters. Sie zeigt, wie man KI und
+        Digitalisierung im Arbeitsalltag sicher, kritisch und kompetent nutzt – mit
+        Lernmodulen, Quizfragen, Praxisbeispielen und Werkzeugen rund um gute KI-Aufträge
+        („Prompts&#8220;).
       </p>
-    </section>
-
-    <section>
-      <h2>In 3 Schritten starten</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="n">1</div>
-          <h3>Link öffnen</h3>
-          <p>App-Link im Browser aufrufen – am PC, Tablet oder Smartphone. Kein Download nötig.</p>
-        </div>
-        <div class="step">
-          <div class="n">2</div>
-          <h3>Kurz einrichten</h3>
-          <p>Beim Erststart Vorname, Abteilung, KI-Level und eine kurze Selbsteinschätzung angeben.</p>
-        </div>
-        <div class="step">
-          <div class="n">3</div>
-          <h3>Loslegen</h3>
-          <p>Über die Navigation einen Bereich anklicken. Dein Fortschritt bleibt lokal gespeichert.</p>
-        </div>
+      <p>
+        Die App läuft komplett im Browser: <strong>ohne Anmeldung, ohne Server, ohne
+        Installation</strong>. Alles, was du eingibst (Profil, Lernfortschritt, eigene
+        Prompts), bleibt ausschließlich lokal in deinem Browser gespeichert.
+      </p>
+      <div class="box box-warn">
+        <span class="box-title">Wichtig: Klickdummy / Demo</span>
+        <p>Die App ist ein <strong>Klickdummy zur Veranschaulichung</strong> – ein Vorschlag aus
+        der Ideenbox, kein fertiges Produkt. Es gibt <strong>keine echte KI-Anbindung</strong>:
+        Alle „intelligenten&#8220; Antworten (Praxishinweise, Prüfwege, BAKIRA-Chat) werden lokal
+        nach festen Regeln erzeugt. Deshalb gilt überall: <strong>keine echten Kundendaten
+        eingeben</strong> – alle Inhalte sind Demo-Beispiele.</p>
+      </div>
+      <div class="box box-why">
+        <span class="box-title">Voraussetzung</span>
+        <p>Die App ist für den <strong>Dienst-PC</strong> gedacht und braucht ein ausreichend
+        großes Browserfenster (mindestens ca. 900&nbsp;Pixel Breite). In einem zu schmalen
+        Fenster – etwa auf dem Smartphone – erscheint nur ein Hinweis, das Fenster zu
+        vergrößern. Ein moderner Browser (Edge, Chrome, Firefox) genügt; ein Download ist
+        nicht nötig.</p>
       </div>
     </section>
 
-    <section>
-      <h2>Die sechs Bereiche</h2>
-      <p class="lead">Unten in der App (bzw. oben am PC) findest du die Navigation mit diesen Bereichen:</p>
+    <!-- ────────────────────────── Inhaltsverzeichnis ────────────────────────── -->
+    <section id="inhalt">
+      <h2>Inhalt dieser Anleitung</h2>
+      <nav class="toc" aria-label="Inhaltsverzeichnis">
+        <ol>
+          <li><a href="#was-ist-das">Was ist diese App?</a></li>
+          <li><a href="#einrichtung">Erste Schritte: die Einrichtung</a></li>
+          <li><a href="#aufbau">Aufbau und Navigation</a></li>
+          <li><a href="#uebersicht">Bereich „Übersicht&#8220;</a></li>
+          <li><a href="#lernen">Bereich „Lernen&#8220;</a></li>
+          <li><a href="#praxis">Bereich „Praxis&#8220;</a></li>
+          <li><a href="#pruefen">Bereich „Prüfen&#8220;</a></li>
+          <li><a href="#prompts">Bereich „Prompts&#8220;</a></li>
+          <li><a href="#bakira">Bereich „BAKIRA&#8220;</a></li>
+          <li><a href="#einstellungen">Einstellungen &amp; Zurücksetzen</a></li>
+          <li><a href="#datenschutz">Datenspeicherung &amp; Datenschutz</a></li>
+          <li><a href="#faq">Häufige Fragen</a></li>
+        </ol>
+      </nav>
+    </section>
+
+    <!-- ────────────────────────── 2. Einrichtung ────────────────────────── -->
+    <section id="einrichtung">
+      <h2>2. Erste Schritte: die Einrichtung</h2>
+      <p class="lead">
+        Beim ersten Öffnen führt dich ein kurzer Assistent in <strong>8 Schritten</strong>
+        durch die Einrichtung. BAKIRA, der spätere KI-Assistent, begleitet dich dabei als
+        Figur. Unten siehst du immer einen Fortschrittsbalken („Schritt&nbsp;X von&nbsp;8&#8220;)
+        und kommst mit <span class="ui">Zurück</span> jederzeit einen Schritt zurück.
+        Weiter geht es erst, wenn der aktuelle Schritt ausgefüllt ist.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Vorname eingeben</h3>
+          <p>Schritt 1: dein Vorname für die persönliche Ansprache.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>Abteilung wählen</h3>
+          <p>Schritt 2: dein Arbeitsbereich – er bestimmt deine Lerninhalte.</p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>Selbsteinschätzung</h3>
+          <p>Schritte 3–8: sechs kurze Aussagen auf einer Skala von 1 bis 4 einordnen.</p>
+        </div>
+      </div>
+
+      <h3>Schritt 1: Vorname</h3>
+      <p>
+        Ein einfaches Textfeld. Der Vorname wird nur für die Begrüßung („Hallo …&#8220;) und im
+        Benutzermenü oben rechts verwendet. Er wird nirgendwohin übertragen und lässt sich
+        später in den <a href="#einstellungen">Einstellungen</a> ändern.
+      </p>
+
+      <h3>Schritt 2: Abteilung – was die Auswahl bedeutet</h3>
+      <p>
+        Du wählst per Klick eine von fünf Karten. Die Abteilung entscheidet, <strong>welche
+        Lernmodule dir unter „Lernen&#8220; im Abschnitt „Dein Bereich&#8220; angeboten werden</strong>
+        und welche Empfehlungen die Übersicht anzeigt:
+      </p>
+      <table class="wide-first">
+        <tr><th>Auswahl</th><th>Gedacht für</th><th>Deine Fachmodule</th></tr>
+        <tr>
+          <td>Leistungsbereich</td>
+          <td>Wer Bescheide, Nachforderungen und rechtssichere Formulierungen prüft.</td>
+          <td>„Nachforderung prüfen&#8220;, „Bürgergeld und Anspruch einordnen&#8220;, „Mitwirkung und Nachweise klar anfordern&#8220;</td>
+        </tr>
+        <tr>
+          <td>Markt &amp; Integration</td>
+          <td>Wer berät, vermittelt und individuelle Situationen einordnet.</td>
+          <td>„Potenzialanalyse und Kooperationsplan&#8220;, „Förderinstrumente sicher vorsortieren&#8220;</td>
+        </tr>
+        <tr>
+          <td>Eingangszone &amp; Service</td>
+          <td>Wer Anliegen sortiert, digitale Kanäle erklärt und Orientierung gibt.</td>
+          <td>„Digitalen Kanal lotsen&#8220;, „Online-Services sicher lotsen&#8220;, „Anliegen schnell und respektvoll klären&#8220;</td>
+        </tr>
+        <tr>
+          <td>Teamleitung</td>
+          <td>Wer Sicherheit, Akzeptanz und gemeinsame Standards im Team begleitet.</td>
+          <td>„KI-Governance im Team verankern&#8220;, „Qualitäts- und Datenschutzstandards prüfen&#8220;</td>
+        </tr>
+        <tr>
+          <td>Allgemeiner Einstieg</td>
+          <td>Wer sich keinem Bereich zuordnen möchte oder neu startet.</td>
+          <td>Keine eigene Fachmodul-Liste – du lernst über die Lernfragen, das Quiz „Mythos oder Realität?&#8220; und die Praxisfallbeispiele.</td>
+        </tr>
+      </table>
+      <div class="box box-why">
+        <span class="box-title">Warum wird das gefragt?</span>
+        <p>Damit du nicht durch Inhalte aller Bereiche scrollen musst: Die App blendet gezielt
+        die Module ein, die zu deiner täglichen Arbeit passen. Die Abteilung lässt sich später
+        nur über <span class="ui">Grundeingaben neu einrichten</span> (Einstellungen) neu
+        wählen – siehe <a href="#einstellungen">Abschnitt 10</a>.</p>
+      </div>
+
+      <h3>Schritte 3–8: Selbsteinschätzung – die sechs Aussagen</h3>
+      <p>
+        Pro Schritt bewertest du eine Aussage auf der Skala
+        <strong>1 = „trifft nicht zu&#8220;</strong>, 2 = „trifft eher nicht zu&#8220;,
+        3 = „trifft eher zu&#8220;, <strong>4 = „trifft voll zu&#8220;</strong>.
+        Das ist ausdrücklich <em>kein Test</em> – es gibt kein Richtig oder Falsch und keine
+        Bewertung durch andere. Die sechs Aussagen:
+      </p>
+      <ol class="plain">
+        <li>Ich kann gut einschätzen, wofür KI im Jobcenter nützlich sein kann.</li>
+        <li>Ich kenne die wichtigsten Regeln für sicheren KI-Einsatz.</li>
+        <li>Ich erkenne, wann Daten zu sensibel für eine KI-Übung sind.</li>
+        <li>Ich kann einen KI-Vorschlag kritisch prüfen, bevor ich ihn nutze.</li>
+        <li>Ich habe KI schon genutzt, um Texte oder Ideen zu strukturieren.</li>
+        <li>Ich weiß, wann ich bei KI-Ergebnissen fachlich oder datenschutzrechtlich besonders vorsichtig sein muss.</li>
+      </ol>
+
+      <div class="box box-out">
+        <span class="box-title">Was aus deinen Antworten wird</span>
+        <p>Aus der Summe aller sechs Antworten errechnet die App dein
+        <strong>KI-Level</strong> – es steuert, wie anspruchsvoll die Lernfragen, das
+        Mythen-Quiz und die Praxisfälle sind. Aus den ersten vier Aussagen wird zusätzlich
+        dein <strong>Startpunkt</strong> bestimmt, der dir auf der Übersicht den passenden
+        Einstieg empfiehlt. Beides bleibt nur lokal in deinem Browser.</p>
+      </div>
+
+      <h4>Die drei KI-Level</h4>
+      <table class="wide-first">
+        <tr><th>KI-Level</th><th>Wann eingestuft (vereinfacht)</th><th>Was es in der App bewirkt</th></tr>
+        <tr>
+          <td>Einsteiger</td>
+          <td>Überwiegend 1er/2er-Antworten (Summe bis 12 Punkte).</td>
+          <td>Grundlegende Lernfragen (z.&nbsp;B. „Was ist eine KI-Antwort?&#8220;), drei einfache Mythen-Aussagen, ein Einstiegs-Praxisfall.</td>
+        </tr>
+        <tr>
+          <td>Grundkenntnisse</td>
+          <td>Gemischte Antworten (13 bis 19 Punkte).</td>
+          <td>Fragen zu Prüfschritten und Datenumfang, vier vertiefte Mythen-Aussagen, ein Praxisfall mit Bürgerkontakt.</td>
+        </tr>
+        <tr>
+          <td>Fortgeschritten</td>
+          <td>Überwiegend 3er/4er-Antworten (20 Punkte und mehr).</td>
+          <td>Fragen zu KI-Kompetenz, Datenschutz-Bewertung und Teamregeln, vier anspruchsvolle Mythen-Aussagen, ein Praxisfall zur Tool-Einführung im Team.</td>
+        </tr>
+      </table>
+
+      <h4>Die drei Startpunkte</h4>
+      <table class="wide-first">
+        <tr><th>Startpunkt</th><th>Bedeutung</th><th>Empfohlener Einstieg</th></tr>
+        <tr>
+          <td>Orientierung aufbauen</td>
+          <td>Du bist noch unsicher – völlig normal. Erst Grundlagen, dann Praxis.</td>
+          <td>Modul „KI einfach erklärt&#8220;</td>
+        </tr>
+        <tr>
+          <td>Sicherheit festigen</td>
+          <td>Erste Orientierung ist da. Jetzt helfen Prüfroutinen und typische KI-Mythen.</td>
+          <td>Modul „Sicherer KI-Umgang&#8220;</td>
+        </tr>
+        <tr>
+          <td>Praxis vertiefen</td>
+          <td>Du wirkst sicher im Einstieg und kannst direkt an Praxisfällen arbeiten.</td>
+          <td>Modul „Nachforderung prüfen&#8220;</td>
+        </tr>
+      </table>
+      <p>
+        Im letzten Schritt heißt die Schaltfläche <span class="ui">App starten</span> – damit
+        ist die Einrichtung abgeschlossen und du landest auf der Übersicht.
+      </p>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 3. Aufbau ────────────────────────── -->
+    <section id="aufbau">
+      <h2>3. Aufbau und Navigation</h2>
+      <p class="lead">Nach der Einrichtung besteht die App aus drei festen Elementen:</p>
+      <ul class="plain">
+        <li><strong>Kopfzeile oben:</strong> links das Jobcenter-Logo mit dem Schriftzug
+          „Digital souverän&#8220; – ein Klick darauf bringt dich immer zur Übersicht zurück.
+          Rechts steht dein Vorname mit einem Personen-Symbol: Das ist das
+          <strong>Benutzermenü</strong>, ein Klick öffnet die
+          <a href="#einstellungen">Einstellungen</a>.</li>
+        <li><strong>Seitenleiste links:</strong> die Hauptnavigation mit den sechs Bereichen
+          (siehe unten). Der aktive Bereich ist farblich hervorgehoben. Am Eintrag
+          <span class="ui">Lernen</span> erscheint ein kleiner Zähler, sobald du Module
+          abgeschlossen hast – er zeigt die Anzahl deiner abgeschlossenen Module.</li>
+        <li><strong>Inhaltsfläche:</strong> der eigentliche Arbeitsbereich. Auf den
+          Unterseiten findest du oben links einen <span class="ui">Übersicht</span>-Knopf
+          (zurück zur Startseite) bzw. innerhalb eines Bereichs einen
+          <span class="ui">Zurück</span>-Knopf zur jeweiligen Bereichs-Startseite.</li>
+      </ul>
+
+      <h3>Die sechs Bereiche im Überblick</h3>
       <div class="areas">
         <div class="area teal">
           <span class="ico">🏠</span>
           <div>
             <h3>Übersicht</h3>
-            <p>Dein persönlicher Einstieg: aktueller Lernfortschritt, eine Empfehlung passend zu deiner
-               Selbsteinschätzung und Schnellzugriffe auf die wichtigsten Funktionen.</p>
+            <p>Dein persönlicher Einstieg: Begrüßung, Startpunkt, empfohlener nächster Schritt und Schnellzugriffe.</p>
           </div>
         </div>
         <div class="area">
           <span class="ico">📖</span>
           <div>
             <h3>Lernen</h3>
-            <p>Dein Lernpfad mit „KI-Grundlagen für alle" und „Dein Bereich" (passend zur gewählten
-               Abteilung). Dazu das Quiz „Mythos oder Realität?" und Praxisfallbeispiele.</p>
+            <p>Dein Lernbereich mit Lernfragen und Fachmodulen, das Quiz „Mythos oder Realität?&#8220; und Praxisfallbeispiele.</p>
           </div>
         </div>
         <div class="area">
           <span class="ico">🎯</span>
           <div>
             <h3>Praxis</h3>
-            <p>Gib ein Thema oder Anliegen ein und sieh, wie KI dabei helfen kann – mit konkreten
-               Beispiel-Prompts und ehrlichen Hinweisen auf die Grenzen.</p>
+            <p>Konkrete Arbeitsbeispiele nach Thema – plus die Möglichkeit, ein eigenes Anliegen einzugeben.</p>
           </div>
         </div>
         <div class="area">
           <span class="ico">✅</span>
           <div>
             <h3>Prüfen</h3>
-            <p>Einen fiktiven oder anonymisierten Fall eingeben und einen möglichen Prüfweg anzeigen
-               lassen: Prüfpfad, Quellenarten und Nachlese-Hinweise. Die fachliche und rechtliche
-               Prüfung bleibt immer beim Menschen.</p>
+            <p>Zu einem fiktiven Fall einen strukturierten Prüfweg mit Prüfschritten, Quellenarten und Hinweisen anzeigen lassen.</p>
           </div>
         </div>
         <div class="area warm">
           <span class="ico">🤖</span>
           <div>
             <h3>Prompts</h3>
-            <p>Der BAKIRA-Prompt-Generator baut aus deinem Anliegen einen strukturierten Prompt
-               (Aufgabe, Kontext, Persona, Format, Ton, Prüfung). Eigene Prompts lassen sich speichern.
-               Alles regelbasiert und lokal – ohne KI-Anbindung.</p>
+            <p>Der Promptgenerator baut aus deinem Anliegen einen strukturierten KI-Auftrag; die Bibliothek sammelt fertige und eigene Prompts.</p>
           </div>
         </div>
         <div class="area">
           <span class="ico">💬</span>
           <div>
             <h3>BAKIRA</h3>
-            <p>Ein lokaler Demo-Chat, um den Umgang mit einem KI-Assistenten gefahrlos auszuprobieren.
-               Die Antworten sind simuliert – keine echte Verbindung zu BAKIRA, keine Sozialdaten.</p>
+            <p>Ein simulierter KI-Arbeitsplatz (Chat, Schnellaktionen, Übersetzungs-Demo), um den Umgang gefahrlos auszuprobieren.</p>
           </div>
         </div>
       </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
     </section>
 
-    <section>
-      <h2>Einstellungen &amp; Daten</h2>
-      <p class="lead">Über das Benutzermenü / Zahnrad erreichbar:</p>
-      <div class="two">
-        <div class="mini">
-          <h3>⚙️ Anpassen</h3>
-          <p>Profil ändern (Vorname, Abteilung), Darstellung (Theme) und Farbvorlage einstellen.</p>
+    <!-- ────────────────────────── 4. Übersicht ────────────────────────── -->
+    <section id="uebersicht">
+      <h2>4. Bereich „Übersicht&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>Die Übersicht ist deine Startseite. Sie beantwortet auf einen Blick: Wo stehe ich,
+        was ist mein sinnvoller nächster Schritt, und wie komme ich mit einem Klick dorthin?</p>
+      </div>
+      <p class="lead">Die Übersicht zeigt von oben nach unten:</p>
+      <table class="wide-first">
+        <tr><th>Element</th><th>Was es zeigt und woher es kommt</th></tr>
+        <tr>
+          <td>Begrüßungskarte</td>
+          <td>„Hallo [Vorname]&#8220; sowie deine gewählte <strong>Abteilung</strong> und dein
+          <strong>KI-Level</strong> – beides stammt aus der Einrichtung. So siehst du jederzeit,
+          auf welcher Grundlage die App ihre Inhalte für dich auswählt.</td>
+        </tr>
+        <tr>
+          <td>Unterstützungshinweis</td>
+          <td>Ein kurzer Mutmach-Satz passend zu deinem KI-Level – z.&nbsp;B. für Einsteiger:
+          „Du musst nicht alles auf einmal können. Starte mit dem nächsten sicheren Schritt.&#8220;</td>
+        </tr>
+        <tr>
+          <td>Dein Startpunkt</td>
+          <td>Deine Einstufung aus der Selbsteinschätzung: „Orientierung aufbauen&#8220;,
+          „Sicherheit festigen&#8220; oder „Praxis vertiefen&#8220; (siehe
+          <a href="#einrichtung">Abschnitt 2</a>).</td>
+        </tr>
+        <tr>
+          <td>Empfohlener nächster Schritt</td>
+          <td>Ein konkreter Modulvorschlag mit Dauer und Kurzbeschreibung. Die App empfiehlt
+          zuerst das zu deinem Startpunkt passende Modul; ist es erledigt, das nächste offene
+          Modul deiner Abteilung. Sind alle Module abgeschlossen, schlägt sie vor, einen
+          Praxisfall zu erkunden.</td>
+        </tr>
+        <tr>
+          <td>Schnellzugriff</td>
+          <td>Vier Knöpfe, die direkt in die Bereiche springen:
+          <span class="ui">Weiterlernen</span> → Lernen,
+          <span class="ui">BAKIRA fragen</span> → BAKIRA,
+          <span class="ui">Prompt finden</span> → Prompts,
+          <span class="ui">Prüfweg</span> → Prüfen.</td>
+        </tr>
+      </table>
+      <div class="box box-out">
+        <span class="box-title">Was kommt dabei heraus?</span>
+        <p>Orientierung: Du musst dir nicht merken, wo du warst – die Übersicht schlägt dir
+        immer einen sinnvollen nächsten Schritt vor und bringt dich mit einem Klick in jeden
+        Bereich.</p>
+      </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 5. Lernen ────────────────────────── -->
+    <section id="lernen">
+      <h2>5. Bereich „Lernen&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>Hier baust du Schritt für Schritt KI-Wissen auf – zugeschnitten auf deine Abteilung
+        und dein KI-Level. Drei unterschiedliche Lernformen (Wissensfragen, Mythen-Quiz,
+        Entscheidungs-Praxisfall) sorgen dafür, dass du nicht nur liest, sondern aktiv
+        einordnest und entscheidest.</p>
+      </div>
+      <p class="lead">
+        Die Startseite von „Lernen&#8220; zeigt drei Karten – jede öffnet einen eigenen
+        Lernbereich. Mit <span class="ui">Zurück zum Lernbereich</span> kommst du jeweils
+        zur Auswahl zurück.
+      </p>
+
+      <h3>5.1 „Dein Lernbereich&#8220;</h3>
+      <p>Diese Seite hat zwei Abschnitte:</p>
+      <h4>a) Lernfragen für dein Level</h4>
+      <p>
+        Zuerst siehst du nur eine anklickbare Karte mit dem Hinweis
+        <em>„Angepasst an dein KI-Level: [dein Level]&#8220;</em> und der Aufforderung, sie
+        anzutippen. <strong>Erst nach dem Klick erscheinen die Lernfragen.</strong>
+      </p>
+      <div class="box box-why">
+        <span class="box-title">Warum erst ein Klick?</span>
+        <p>Damit die Seite aufgeräumt startet und sichtbar wird, dass die Fragen bewusst an
+        dein persönliches KI-Level angepasst sind – du startest das Üben selbst, statt von
+        einer Fragenliste empfangen zu werden.</p>
+      </div>
+      <p>
+        Die Lernfragen sind <strong>Auswahlfragen</strong> (Multiple Choice) mit je drei
+        Antwortmöglichkeiten – je nach Level zwei bis drei Fragen mit unterschiedlicher
+        Tiefe: Einsteiger üben Grundsätze („Eine KI-Antwort ist ein Vorschlag, den du
+        fachlich prüfst&#8220;), Fortgeschrittene bewerten z.&nbsp;B. Datenschutzrisiken vor einer
+        Tool-Einführung. Pro Frage kannst du <strong>einmal</strong> antworten: Danach wird
+        die richtige Antwort grün markiert und du bekommst sofort ein Feedback
+        („Richtig.&#8220; / „Nicht ganz.&#8220;) mit einer kurzen Erklärung.
+      </p>
+      <h4>b) Dein Bereich: [deine Abteilung]</h4>
+      <p>
+        Darunter liegt die Liste deiner <strong>Fachmodule</strong> (welche das je Abteilung
+        sind, zeigt die Tabelle in <a href="#einrichtung">Abschnitt 2</a>). Jeder Eintrag
+        zeigt:
+      </p>
+      <ul class="plain">
+        <li><strong>Statussymbol:</strong> leerer Kreis = noch offen, grüner Haken = abgeschlossen.</li>
+        <li><strong>Titel und Dauer</strong> (z.&nbsp;B. „7 Min.&#8220;) sowie eine Kurzbeschreibung.</li>
+        <li><strong>Chip „Empfohlen&#8220;:</strong> Das Modul gehört zur Empfehlungsliste deiner Abteilung.</li>
+        <li><strong>Chip „Fertig&#8220;:</strong> Du hast das Modul bereits abgeschlossen.</li>
+        <li><strong>Warnhinweis</strong> (falls vorhanden): z.&nbsp;B. „Nur mit fiktiven Beispielen üben.&#8220;</li>
+      </ul>
+
+      <h3>5.2 Ein Modul durcharbeiten und abschließen</h3>
+      <p>
+        Ein Klick auf ein Modul öffnet die Modulseite. Oben stehen Dauer, Titel,
+        Zusammenfassung, ggf. ein Warnhinweis sowie die Zeile
+        <strong>„Quelle/Prüfung:&#8220;</strong> – sie nennt, worauf sich der Lerninhalt stützt
+        (z.&nbsp;B. EU AI Act, Orientierungshilfen der Datenschutzkonferenz, Fachliche
+        Weisungen der BA). So bleibt nachvollziehbar, dass die Inhalte keine Erfindung der
+        App sind.
+      </p>
+      <p>
+        Der Lernstoff kommt als <strong>Lernkarten</strong>: kurze Merksätze, die du mit
+        <span class="ui">Weiter</span>/<span class="ui">Zurück</span> oder über die Punkte
+        unter der Karte durchblätterst („Karte 1/3&#8220; zeigt deine Position). Auf der letzten
+        Karte erscheint <span class="ui">Modul abschließen</span>.
+      </p>
+      <div class="box box-out">
+        <span class="box-title">Was kommt dabei heraus?</span>
+        <p>Der Abschluss wird dauerhaft gespeichert: Das Modul bekommt den Haken und den Chip
+        „Fertig&#8220;, der Zähler am Lernen-Eintrag in der Navigation steigt, und die Übersicht
+        empfiehlt dir das nächste offene Modul. Versehentlich abgeschlossen? Auf der letzten
+        Karte steht dann <span class="ui">Als offen markieren</span> – damit nimmst du den
+        Abschluss zurück.</p>
+      </div>
+
+      <h3>5.3 „Mythos oder Realität?&#8220;</h3>
+      <p>
+        Ein Quiz mit typischen Aussagen über KI (drei bis vier, je nach KI-Level – z.&nbsp;B.
+        „KI erkennt zuverlässig, welche Daten im Einzelfall sensibel sind.&#8220;). Zu jeder
+        Aussage entscheidest du per Knopf:
+      </p>
+      <ul class="plain">
+        <li><span class="ui">Realität</span> – die Aussage stimmt aus deiner Sicht.</li>
+        <li><span class="ui">Mythos</span> – die Aussage ist ein verbreiteter Irrtum.</li>
+      </ul>
+      <p>
+        Wie bei den Lernfragen gilt: eine Antwort pro Aussage, danach werden die richtige
+        Lösung markiert und eine Erklärung eingeblendet.
+      </p>
+      <div class="box box-why">
+        <span class="box-title">Warum dieses Format?</span>
+        <p>Über KI kursieren viele Halbwahrheiten („KI entscheidet bald allein&#8220;). Wer typische
+        Mythen einmal aktiv eingeordnet hat, erkennt sie im Arbeitsalltag schneller wieder –
+        und kann Kolleginnen und Kollegen sicherer antworten.</p>
+      </div>
+
+      <h3>5.4 „Praxisfallbeispiele&#8220;</h3>
+      <p>
+        Hier bekommst du <strong>einen Praxisfall passend zu deinem KI-Level</strong> als
+        Entscheidungsübung – etwa: Eine KI hat einen Nachforderungs-Entwurf geschrieben, der
+        flüssig klingt, aber viele Falldetails nennt. Was tust du? Du wählst eine von drei
+        Handlungsoptionen (z.&nbsp;B. „direkt senden&#8220;, „prüfen und kürzen&#8220;, „KI gar nicht
+        nutzen&#8220;) und bekommst sofort eine Rückmeldung, welcher Weg sicher ist – plus einen
+        Merksatz zum Mitnehmen (z.&nbsp;B. „KI-Texte sind Arbeitsentwürfe. Erst Prüfung, dann
+        Nutzung.&#8220;).
+      </p>
+      <table class="wide-first">
+        <tr><th>KI-Level</th><th>Dein Praxisfall</th></tr>
+        <tr><td>Einsteiger</td><td>„KI-Entwurf für eine Nachforderung&#8220; – einen KI-Text vor dem Versand richtig behandeln.</td></tr>
+        <tr><td>Grundkenntnisse</td><td>„KI-Antwort an eine ratsuchende Person&#8220; – Zusagen und Datensparsamkeit prüfen, bevor etwas nach außen geht.</td></tr>
+        <tr><td>Fortgeschritten</td><td>„Neues KI-Tool im Team einführen&#8220; – erst Regeln, Datenschutz und fiktive Testdaten klären.</td></tr>
+      </table>
+      <p>
+        <strong>Hinweis zum Speichern:</strong> Deine Antworten in Lernfragen, Quiz und
+        Praxisfall gelten nur für die aktuelle Sitzung – nach einem Neuladen der Seite kannst
+        du neu üben. Dein <strong>Modul-Fortschritt bleibt dagegen dauerhaft</strong> gespeichert.
+      </p>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 6. Praxis ────────────────────────── -->
+    <section id="praxis">
+      <h2>6. Bereich „Praxis&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>Lernmodule erklären Grundsätze – „Praxis&#8220; zeigt an konkreten Alltagssituationen,
+        wo KI wirklich hilft, wo sie an Grenzen stößt und wie ein brauchbarer Prompt dafür
+        aussieht. Ideal als Nachschlagewerk vor einer eigenen Aufgabe.</p>
+      </div>
+
+      <h3>6.1 Praxisbeispiele nach Thema</h3>
+      <p>
+        Oben wählst du eines von fünf Themen – jedes öffnet eine eigene Seite mit den
+        passenden Beispielkarten (mit <span class="ui">Zurück zum Praxisbereich</span>
+        kommst du zur Themenwahl zurück):
+      </p>
+      <table class="wide-first">
+        <tr><th>Themen-Knopf</th><th>Enthaltene Beispiele</th></tr>
+        <tr><td>Leistungsbereich</td><td>„Nachforderung formulieren&#8220;, „Mitwirkungsschreiben prüfen&#8220;</td></tr>
+        <tr><td>Markt und Integration</td><td>„Beratungsgespräch vorbereiten&#8220;, „Förderoptionen vorsortieren&#8220;</td></tr>
+        <tr><td>Eingangszone und Service</td><td>„Digitalen Weg erklären&#8220;, „Anliegen am Empfang einordnen&#8220;</td></tr>
+        <tr><td>Teamleitung</td><td>„Teambesprechung zu KI-Regeln vorbereiten&#8220;</td></tr>
+        <tr><td>Schreiben und Kommunikation</td><td>„Nachforderung formulieren&#8220;, „Digitalen Weg erklären&#8220;, „Verständliche Absage formulieren&#8220;</td></tr>
+      </table>
+      <p>Jede Beispielkarte ist gleich aufgebaut – die fünf Felder bedeuten:</p>
+      <table class="wide-first">
+        <tr><th>Feld</th><th>Bedeutung</th></tr>
+        <tr><td>Situation</td><td>Das (fiktive) Ausgangsszenario aus dem Arbeitsalltag.</td></tr>
+        <tr><td>So kann KI helfen</td><td>Welche Teilaufgabe eine KI sinnvoll übernehmen könnte (z.&nbsp;B. Entwurf, Checkliste, einfache Sprache).</td></tr>
+        <tr><td>Möglicher Prompt</td><td>Ein fertig formulierter Beispiel-Auftrag, den du als Vorlage übernehmen und anpassen kannst.</td></tr>
+        <tr><td>Grenzen</td><td>Was die KI hier gerade <em>nicht</em> kann (z.&nbsp;B. keine rechtssicheren Fristen, kennt keinen echten Einzelfall).</td></tr>
+        <tr><td>Menschliche Prüfung</td><td>Was die Fachkraft in jedem Fall selbst prüfen muss, bevor das Ergebnis verwendet wird.</td></tr>
+      </table>
+
+      <h3>6.2 Eigene Frage oder Fall eingeben</h3>
+      <p>
+        Unter den Themen findest du das Textfeld <span class="ui">Dein Anliegen oder Fall</span>.
+        Beschreibe kurz (ein paar Wörter genügen, vorher bleibt die Schaltfläche ausgegraut),
+        wobei KI helfen soll – <strong>nur mit fiktiven Angaben</strong>. Ein Klick auf
+        <span class="ui">Praxishinweis anzeigen</span> liefert vier Blöcke:
+      </p>
+      <ul class="plain">
+        <li><strong>So kann KI helfen:</strong> realistische Unterstützungsmöglichkeiten zu deinem Anliegen.</li>
+        <li><strong>Da kann KI eher nicht helfen:</strong> die ehrliche Gegenseite – was KI hier nicht leisten kann.</li>
+        <li><strong>Möglicher Prompt:</strong> eine Auftragsvorlage, die du übernehmen und anpassen kannst.</li>
+        <li><strong>Menschliche Prüfung:</strong> was bei dir als Fachkraft bleibt.</li>
+      </ul>
+      <div class="box box-warn">
+        <span class="box-title">So funktioniert die Demo dahinter</span>
+        <p>Die App „versteht&#8220; dein Anliegen nicht wirklich: Sie erkennt <strong>Stichworte</strong>
+        (z.&nbsp;B. „Brief&#8220;/„formulieren&#8220; → Schreiben, „erklären&#8220;/„App&#8220; → Erklärung,
+        „prüfen&#8220; → Qualitätsprüfung, „Kooperationsplan&#8220;/„Förderung&#8220; → Beratung,
+        „Ermessen&#8220;/„Anspruch&#8220; → Hinweis auf Grenzen) und wählt dazu eine vorbereitete
+        Antwort. Passt kein Stichwort, kommt ein allgemeiner Hinweis. Änderst du den Text,
+        verschwindet das Ergebnis, bis du erneut klickst. In einer echten Ausbaustufe würde
+        hier ein KI-Dienst antworten.</p>
+      </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 7. Prüfen ────────────────────────── -->
+    <section id="pruefen">
+      <h2>7. Bereich „Prüfen&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>Bevor man einer KI (oder sich selbst) bei einem Fall vertraut, braucht es einen
+        strukturierten Prüfweg: Welche Schritte, welche Quellen, welche Stolpersteine? Dieser
+        Bereich übt genau diese Herangehensweise – als Recherche-Startpunkt, nie als
+        Entscheidung.</p>
+      </div>
+      <h3>So gehst du vor</h3>
+      <ol class="plain">
+        <li>In das Feld <span class="ui">Fall oder Thema eingeben</span> einen
+          <strong>fiktiven oder anonymisierten</strong> Fall eintragen – z.&nbsp;B.
+          „Bürgergeld, Einkommen und fehlende Unterlagen&#8220; (ein paar Wörter genügen).</li>
+        <li>Auf <span class="ui">Prüfweg anzeigen</span> klicken.</li>
+        <li>Die App ordnet deine Eingabe anhand von Stichworten einem von fünf Falltypen zu
+          und zeigt den passenden Prüfweg.</li>
+      </ol>
+      <table class="wide-first">
+        <tr><th>Falltyp</th><th>Wird gewählt bei Stichworten wie …</th></tr>
+        <tr><td>Leistung</td><td>Bürgergeld, Bedarf, Einkommen, Vermögen, Miete, Mehrbedarf</td></tr>
+        <tr><td>Mitwirkung</td><td>Nachweis, Unterlagen, Mitwirkung, Frist, Nichtvorlage</td></tr>
+        <tr><td>Integration</td><td>Kooperationsplan, Vermittlung, Weiterbildung, Maßnahme, Förderung</td></tr>
+        <tr><td>Service und Digital</td><td>Online, App, Postfach, Antrag, Upload, Termin</td></tr>
+        <tr><td>Allgemeiner Prüfpfad</td><td>Alles andere – ein universeller Einstieg, der zuerst die Falltyp-Klärung empfiehlt.</td></tr>
+      </table>
+      <p>Das Ergebnis besteht immer aus vier Blöcken:</p>
+      <table class="wide-first">
+        <tr><th>Block</th><th>Bedeutung und Nutzen</th></tr>
+        <tr>
+          <td>Möglicher Prüfpfad</td>
+          <td>Nummerierte Prüfschritte in sinnvoller Reihenfolge – z.&nbsp;B. erst
+          Anspruchsvoraussetzungen, dann Einkommensanrechnung, dann Weisungen gegenhalten.</td>
+        </tr>
+        <tr>
+          <td>Quellenarten</td>
+          <td>Wo du verlässlich nachliest: Fachliche Weisungen der BA, einschlägige
+          Paragrafen (z.&nbsp;B. §§ 7–12 SGB&nbsp;II), lokale Arbeitshilfen. Es sind bewusst
+          <em>Quellenarten</em>, keine Linkliste – die aktuelle Fassung suchst du im Fachsystem.</td>
+        </tr>
+        <tr>
+          <td>Stichworte</td>
+          <td>Schlagworte (z.&nbsp;B. „Bedarfsgemeinschaft&#8220;, „Vermögensfreibetrag&#8220;) für die
+          gezielte Suche in Weisungen und Wissenssystemen.</td>
+        </tr>
+        <tr>
+          <td>Hinweise und Nachlese</td>
+          <td>Praktische Erinnerungen, z.&nbsp;B. Bescheidvorlagen prüfen oder keine
+          Bearbeitungszeiten zusagen.</td>
+        </tr>
+      </table>
+      <div class="box box-out">
+        <span class="box-title">Was kommt dabei heraus – und was nicht?</span>
+        <p>Heraus kommt ein <strong>Rechercheplan</strong>, mit dem du strukturiert in die
+        Fallprüfung startest. Es kommt <strong>keine Entscheidung</strong> heraus: Unter jedem
+        Ergebnis steht der feste Hinweis „KI zeigt nur Weg und Quellen. Fachliche und
+        rechtliche Prüfung bleibt beim Menschen.&#8220; – das ist das Kernprinzip der ganzen App.</p>
+      </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 8. Prompts ────────────────────────── -->
+    <section id="prompts">
+      <h2>8. Bereich „Prompts&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>Die Qualität einer KI-Antwort hängt vor allem vom Auftrag ab – dem „Prompt&#8220;. Dieser
+        Bereich hilft auf zwei Wegen: Der <strong>Generator</strong> baut aus deinem Anliegen
+        einen sauber strukturierten Auftrag; die <strong>Bibliothek</strong> sammelt bewährte
+        Vorlagen und deine eigenen Prompts.</p>
+      </div>
+
+      <h3>8.1 BAKIRA Promptgenerator</h3>
+      <p>Der Generator hat ein Textfeld und drei Auswahlfelder:</p>
+      <table class="wide-first">
+        <tr><th>Feld</th><th>Optionen</th><th>Bedeutung</th></tr>
+        <tr>
+          <td>Dein Anliegen</td>
+          <td>Freitext (mindestens ein kurzer Satz)</td>
+          <td>Beschreibt, wobei BAKIRA helfen soll – wird im Prompt zur Zeile „Kontext&#8220;.
+          Bei zu kurzer Eingabe erscheint der Hinweis „Beschreibe kurz, wobei BAKIRA helfen
+          soll.&#8220;</td>
+        </tr>
+        <tr>
+          <td>Ausgabeformat</td>
+          <td>Fließtext · Liste · E-Mail · Tabelle</td>
+          <td>Legt fest, <strong>in welcher Form</strong> das Ergebnis geliefert werden soll.
+          „Liste&#8220; eignet sich für Prüfpunkte, „E-Mail&#8220; für Anschreiben-Entwürfe, „Tabelle&#8220;
+          für Vergleiche und Korrekturübersichten, „Fließtext&#8220; für alles Erklärende.</td>
+        </tr>
+        <tr>
+          <td>Tonfall</td>
+          <td>Sachlich · Professionell · Bürgerfreundlich · Persönlich</td>
+          <td>Bestimmt die <strong>Sprachfärbung</strong> der Antwort: „Sachlich&#8220; = neutral und
+          knapp, „Professionell&#8220; = förmlich, „Bürgerfreundlich&#8220; = einfache, zugewandte
+          Sprache ohne Fachjargon, „Persönlich&#8220; = wärmer, z.&nbsp;B. für interne Nachrichten.</td>
+        </tr>
+        <tr>
+          <td>Zielgruppe / Persona</td>
+          <td>Fachkraft im Jobcenter · Teamleitung · Bürger/in · Auszubildende/r</td>
+          <td>Für <strong>wen</strong> die Ausgabe gedacht ist. Dieselbe Erklärung fällt für
+          eine Bürgerin anders aus als für eine Fachkraft – die KI soll Wortwahl und
+          Detailtiefe daran ausrichten.</td>
+        </tr>
+      </table>
+      <p>
+        Ein Klick auf <span class="ui">Prompt generieren</span> erzeugt einen Auftrag mit
+        sechs festen Zeilen. Die App erkennt dabei an Stichworten in deinem Anliegen, welche
+        <strong>Aufgaben-Zeile</strong> passt (Formulieren, Prüfen, Erklären, Recherchieren –
+        sonst ein allgemeiner Auftrag):
+      </p>
+      <div class="example">
+        <span class="ex-title">Beispiel: Anliegen „Eine E-Mail zur fehlenden Bescheinigung formulieren&#8220;, Format „E-Mail&#8220;, Ton „bürgerfreundlich&#8220;, Persona „Bürger/in&#8220;</span>
+        <pre>Aufgabe: Formuliere oder überarbeite den folgenden Text.
+Kontext: Eine E-Mail zur fehlenden Bescheinigung formulieren
+Zielgruppe/Persona: Buerger/in
+Format: E-Mail
+Tonfall: buergerfreundlich
+Prüfung/Rückfragen: Falls der Auftrag unklar ist, frage zuerst nach dem
+gewünschten Stil und Zweck. Weise auf Stellen hin, die fachlich geprüft
+werden müssen.</pre>
+      </div>
+      <div class="box box-why">
+        <span class="box-title">Warum diese sechs Zeilen?</span>
+        <p><strong>Aufgabe, Kontext, Zielgruppe, Format, Tonfall, Prüfung/Rückfragen</strong> –
+        diese Struktur macht KI-Antworten kontrollierbar: Die KI weiß genau, was sie tun soll,
+        und wird zugleich angewiesen, bei Unklarheiten nachzufragen und auf prüfpflichtige
+        Stellen hinzuweisen. Genau diese Baustein-Methode wird auch in den Lernmodulen
+        vermittelt.</p>
+      </div>
+      <p>Unter dem generierten Prompt stehen zwei Aktionen:</p>
+      <ul class="plain">
+        <li><span class="ui">Kopieren</span> – legt den Prompt in die Zwischenablage, um ihn
+          in einem zugelassenen KI-System (Zielbild: BAKIRA) einzufügen.</li>
+        <li><span class="ui">In Bibliothek speichern</span> – legt den Prompt mit dem Tag
+          „Generator&#8220; in deiner Prompt-Bibliothek ab (unter „Alle Prompts&#8220;), damit du ihn
+          wiederverwenden kannst.</li>
+      </ul>
+      <div class="box box-warn">
+        <span class="box-title">Ehrlicher Hinweis</span>
+        <p>Der Generator arbeitet <strong>regelbasiert und lokal</strong> – er formuliert dein
+        Anliegen nicht intelligent um, sondern setzt es in eine bewährte Struktur ein.
+        Intelligentes Umformulieren wäre Aufgabe einer späteren, echten KI-Anbindung.</p>
+      </div>
+
+      <h3>8.2 Prompt-Bibliothek</h3>
+      <p>
+        Die Bibliothek startet mit einer Bereichsauswahl. Jeder Knopf öffnet eine eigene
+        Seite mit den passenden Prompts:
+      </p>
+      <table class="wide-first">
+        <tr><th>Bereich</th><th>Was du dort findest</th></tr>
+        <tr><td>Alle Prompts</td><td>Sämtliche Prompts – die elf mitgelieferten und alle selbst erstellten oder generierten.</td></tr>
+        <tr><td>Schreiben und Umformulieren</td><td>Texte bürgerfreundlich umformulieren, E-Mails im gewünschten Stil umschreiben.</td></tr>
+        <tr><td>Prüfen und Qualität</td><td>KI-Antworten fachlich prüfen, Grammatik-/Rechtschreibprüfung mit Tabellen-Ausgabe.</td></tr>
+        <tr><td>Datenschutz und Sicherheit</td><td>Entwürfe auf unnötige personenbezogene Daten prüfen, datensparsame Alternativen.</td></tr>
+        <tr><td>Lernen und Erklären</td><td>Lernfragen erstellen, Themen mit Fachpersona verständlich erklären lassen.</td></tr>
+        <tr><td>Prompting und Struktur</td><td>Prompts verbessern, Baustein-Vorlage nutzen, KI zuerst Rückfragen stellen lassen.</td></tr>
+        <tr><td>Teamleitung</td><td>Checklisten für sichere KI-Nutzung im Team.</td></tr>
+      </table>
+      <p>
+        Die Zuordnung läuft über die <strong>Tags</strong> der Prompts. Eigene Prompts findest
+        du immer unter „Alle Prompts&#8220; – vergibst du passende Tags (z.&nbsp;B. „Datenschutz&#8220;),
+        erscheinen sie zusätzlich im jeweiligen Bereich.
+      </p>
+      <h4>Auf einer Bereichsseite</h4>
+      <ul class="plain">
+        <li><strong>Suchfeld:</strong> filtert live nach Titel, Tag, Abteilung oder Prompttext.</li>
+        <li><strong>Prompt-Karten:</strong> zeigen Titel, den vollständigen Prompttext und die
+          Tags. Mitgelieferte Vorlagen tragen den Hinweis <em>„Eingebaut&#8220;</em>.</li>
+        <li><span class="ui">Nutzen</span> – kopiert den Prompttext in die Zwischenablage.</li>
+        <li><span class="ui">Bearbeiten</span> / <span class="ui">Löschen</span> – nur bei
+          <strong>eigenen</strong> Prompts möglich; die eingebauten Vorlagen sind geschützt,
+          damit die Beispiele erhalten bleiben.</li>
+        <li><span class="ui">+ Neuer Prompt</span> – öffnet den Editor für einen eigenen Prompt.</li>
+      </ul>
+      <h4>Eigenen Prompt anlegen (Editor)</h4>
+      <table class="wide-first">
+        <tr><th>Feld</th><th>Bedeutung</th></tr>
+        <tr><td>Titel</td><td>Kurzer, wiedererkennbarer Name – danach lässt sich später suchen.</td></tr>
+        <tr><td>Prompttext</td><td>Der eigentliche KI-Auftrag. Tipp: die Sechs-Zeilen-Struktur des Generators übernehmen.</td></tr>
+        <tr><td>Tags (kommagetrennt)</td><td>Schlagworte wie „Datenschutz, Check&#8220; – sie machen den Prompt auffindbar und ordnen ihn den Bereichen zu.</td></tr>
+      </table>
+      <p>
+        <span class="ui">Speichern</span> ist erst aktiv, wenn Titel und Prompttext gefüllt
+        sind. Gespeicherte eigene Prompts landen unter „Alle Prompts&#8220; und bleiben – wie
+        alles – nur lokal in deinem Browser.
+      </p>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 9. BAKIRA ────────────────────────── -->
+    <section id="bakira">
+      <h2>9. Bereich „BAKIRA&#8220;</h2>
+      <div class="box box-why">
+        <span class="box-title">Warum gibt es diesen Bereich?</span>
+        <p>BAKIRA ist das Zielbild eines KI-Assistenten der Bundesagentur. Der „BAKIRA
+        Workspace&#8220; in dieser Demo zeigt, <strong>wie sich die Arbeit damit anfühlen
+        würde</strong> – gefahrlos, weil alles simuliert ist. So kann man Bedienung und
+        Grenzen kennenlernen, bevor es ein echtes System gibt.</p>
+      </div>
+      <p class="lead">
+        Der Workspace trägt sichtbar das Abzeichen „Demo&#8220; und den Dauerhinweis „Keine echten
+        Kundendaten eingeben. Demo ohne KI-Anbindung.&#8220; Er besteht aus vier Abschnitten:
+      </p>
+
+      <h3>9.1 Schnellaktionen</h3>
+      <p>Vier Knöpfe zeigen typische Aufgaben eines künftigen Assistenten. Ein Klick fügt
+      eine vorbereitete Demo-Antwort in den Chat ein:</p>
+      <table class="wide-first">
+        <tr><th>Schnellaktion</th><th>Was sie demonstriert</th></tr>
+        <tr><td>Dokument zusammenfassen</td><td>Lange Texte auf das Wesentliche eindampfen.</td></tr>
+        <tr><td>Text vereinfachen</td><td>Schwere Verwaltungssprache in einfache Sprache übertragen.</td></tr>
+        <tr><td>Antwortentwurf erstellen</td><td>Einen ersten höflichen Antwortentwurf liefern, den die Fachkraft ausarbeitet.</td></tr>
+        <tr><td>Datenschutz prüfen</td><td>Einen Text auf personenbezogene Daten durchsehen – mit dem ehrlichen Zusatz, dass die fachliche Prüfung beim Menschen bleibt.</td></tr>
+      </table>
+
+      <h3>9.2 Chat mit BAKIRA</h3>
+      <p>
+        Unten im Chat tippst du eine Nachricht und sendest sie mit <span class="ui">Senden</span>
+        oder der Eingabetaste. Die Antworten sind <strong>simuliert</strong>: Die Demo erkennt
+        einige Stichworte (z.&nbsp;B. „Prompt&#8220; → Tipp zur Promptstruktur; „Daten&#8220;/„Datenschutz&#8220;
+        → Hinweis auf fiktive Beispiele) und antwortet sonst mit einem allgemeinen Hinweis,
+        die Frage klar zu stellen und die Antwort fachlich zu prüfen. Es besteht
+        <strong>keine Verbindung zu einem echten KI-System</strong>.
+      </p>
+
+      <h3>9.3 Dokument hochladen (Demo)</h3>
+      <p>
+        Über <span class="ui">Datei auswählen (Demo)</span> kannst du eine Datei (.pdf, .docx,
+        .txt) auswählen. Es wird aber <strong>nur der Dateiname angezeigt</strong> – nichts
+        wird gespeichert, gelesen oder übertragen. Der Abschnitt veranschaulicht lediglich,
+        dass ein echter Assistent Dokumente entgegennehmen könnte.
+      </p>
+
+      <h3>9.4 Übersetzungs-Demo</h3>
+      <p>
+        Vier Sprachknöpfe – <span class="ui">Englisch</span>, <span class="ui">Arabisch</span>,
+        <span class="ui">Ukrainisch</span>, <span class="ui">Türkisch</span> – zeigen je einen
+        fest hinterlegten Beispielsatz in der gewählten Sprache. Das veranschaulicht das
+        Einsatzfeld „mehrsprachige Verständigung&#8220;, ohne echte Übersetzung.
+      </p>
+      <div class="box box-out">
+        <span class="box-title">Was nimmst du hier mit?</span>
+        <p>Ein Gefühl dafür, welche Aufgaben ein KI-Assistent übernehmen könnte (zusammenfassen,
+        vereinfachen, entwerfen, prüfen, übersetzen) – und die Gewohnheit, jede dieser
+        Ausgaben als <strong>Entwurf</strong> zu behandeln, der fachlich geprüft wird.</p>
+      </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 10. Einstellungen ────────────────────────── -->
+    <section id="einstellungen">
+      <h2>10. Einstellungen &amp; Zurücksetzen</h2>
+      <p class="lead">
+        Ein Klick auf deinen <strong>Namen oben rechts</strong> (Benutzermenü) öffnet die
+        Einstellungen. Änderungen gelten erst nach <span class="ui">Speichern</span>;
+        <span class="ui">Abbrechen</span> oder die Escape-Taste schließen ohne Änderung.
+      </p>
+
+      <h3>Profil</h3>
+      <table class="wide-first">
+        <tr><th>Feld</th><th>Bedeutung</th></tr>
+        <tr><td>Vorname</td><td>Frei änderbar – wirkt auf Begrüßung und Benutzermenü.</td></tr>
+        <tr><td>Abteilung</td><td>Wird nur <strong>angezeigt</strong> und ist hier bewusst nicht änderbar:
+          Da die Abteilung deine Lerninhalte bestimmt, änderst du sie über
+          <span class="ui">Grundeingaben neu einrichten</span> – so beantwortest du auch die
+          Selbsteinschätzung neu, und Empfehlungen bleiben stimmig.</td></tr>
+      </table>
+
+      <h3>Darstellung</h3>
+      <table class="wide-first">
+        <tr><th>Auswahlfeld</th><th>Optionen</th><th>Bedeutung</th></tr>
+        <tr><td>Darstellung</td><td>Hell · Dunkel</td><td>Heller oder dunkler Anzeigemodus der gesamten App.</td></tr>
+        <tr><td>Farbtemplate</td><td>Blau · Grün · Rot</td><td>Die Akzentfarbe der Oberfläche (Knöpfe, Hervorhebungen). Reine Geschmackssache – Inhalte ändern sich nicht.</td></tr>
+      </table>
+
+      <h3>Erprobung und Daten: die zwei Reset-Möglichkeiten</h3>
+      <p>Beide Aktionen fragen vor dem Ausführen zur Sicherheit nach:</p>
+      <table class="wide-first">
+        <tr><th>Aktion</th><th>Was wird gelöscht?</th><th>Was bleibt erhalten?</th></tr>
+        <tr>
+          <td>Grundeingaben neu einrichten</td>
+          <td>Vorname, Abteilung und Selbsteinschätzung – der Einrichtungs-Assistent startet
+          danach neu.</td>
+          <td>Lernfortschritt (abgeschlossene Module) und eigene Prompts.</td>
+        </tr>
+        <tr>
+          <td>Demo komplett zurücksetzen</td>
+          <td>Alles: Profil, Selbsteinschätzung, Lernfortschritt und eigene Prompts.</td>
+          <td>Nur die elf eingebauten Beispiel-Prompts (Auslieferungszustand).</td>
+        </tr>
+      </table>
+      <div class="box box-why">
+        <span class="box-title">Wozu zwei Varianten?</span>
+        <p>„Grundeingaben neu einrichten&#8220; ist gedacht, wenn du Abteilung oder KI-Level neu
+        wählen willst, ohne deinen Lernfortschritt zu verlieren. „Demo komplett zurücksetzen&#8220;
+        bringt die App in den Auslieferungszustand – praktisch, wenn du sie jemandem
+        unvoreingenommen vorführen möchtest.</p>
+      </div>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
+    </section>
+
+    <!-- ────────────────────────── 11. Datenschutz ────────────────────────── -->
+    <section class="privacy" id="datenschutz">
+      <h2>11. Datenspeicherung &amp; Datenschutz auf einen Blick</h2>
+      <ul>
+        <li>Keine echten Kundendaten – alle Inhalte sind Demo-Beispiele, und so soll es bleiben.</li>
+        <li>Kein Login, kein Server, kein Tracking – die App sendet nichts ins Netz.</li>
+        <li>Profil, Lernfortschritt und eigene Prompts liegen ausschließlich lokal im Browser
+            (localStorage) des genutzten Geräts.</li>
+        <li>Kein Abgleich zwischen Geräten oder Browsern: Anderes Gerät = leerer Stand.</li>
+        <li>Wer Browserdaten („Websitedaten&#8220;) löscht, löscht damit auch Profil, Fortschritt
+            und eigene Prompts.</li>
+        <li>Quiz-Antworten (Lernfragen, Mythen, Praxisfall) gelten nur für die laufende
+            Sitzung und werden gar nicht erst dauerhaft gespeichert.</li>
+      </ul>
+    </section>
+
+    <!-- ────────────────────────── 12. FAQ ────────────────────────── -->
+    <section id="faq">
+      <h2>12. Häufige Fragen</h2>
+      <div class="faq">
+        <div class="faq-item">
+          <p class="q">Warum sehe ich andere Lerninhalte als meine Kollegin?</p>
+          <p class="a">Die App passt sich an zwei Angaben aus der Einrichtung an: Die
+          <strong>Abteilung</strong> bestimmt die Fachmodule unter „Dein Bereich&#8220;, das
+          <strong>KI-Level</strong> bestimmt Lernfragen, Mythen-Quiz und Praxisfall. Zwei
+          Personen mit unterschiedlichen Angaben sehen daher unterschiedliche Inhalte.</p>
         </div>
-        <div class="mini">
-          <h3>↺ Zurücksetzen</h3>
-          <p><strong>Grundeingaben neu einrichten</strong> setzt Profil &amp; Selbsteinschätzung zurück
-             (Fortschritt bleibt). <strong>Demo komplett zurücksetzen</strong> löscht alle eigenen Daten.</p>
+        <div class="faq-item">
+          <p class="q">Wie ändere ich meine Abteilung oder mein KI-Level?</p>
+          <p class="a">Benutzermenü (Name oben rechts) → <span class="ui">Grundeingaben neu
+          einrichten</span>. Der Einrichtungs-Assistent startet neu; Lernfortschritt und
+          eigene Prompts bleiben erhalten.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Werden meine Antworten bewertet oder an jemanden übermittelt?</p>
+          <p class="a">Nein. Es gibt keinen Server und keine Auswertung durch Dritte. Die
+          Selbsteinschätzung dient nur dazu, dir passende Inhalte anzuzeigen, und bleibt
+          lokal in deinem Browser.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Ist BAKIRA hier ein echter KI-Assistent?</p>
+          <p class="a">Nein. Der BAKIRA-Bereich ist eine Simulation ohne KI-Anbindung: Die
+          Antworten sind vorbereitete Demo-Texte, die über einfache Stichwort-Erkennung
+          ausgewählt werden. Gleiches gilt für die Praxishinweise, die Prüfwege und den
+          Promptgenerator.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Was passiert mit einer Datei, die ich bei BAKIRA „hochlade&#8220;?</p>
+          <p class="a">Nichts. Es wird nur der Dateiname angezeigt – die Datei wird weder
+          gelesen noch gespeichert noch übertragen. Der Upload ist reine Veranschaulichung.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Warum sind meine Quiz-Antworten nach dem Neuladen weg?</p>
+          <p class="a">Antworten in Lernfragen, Mythen-Quiz und Praxisfall gelten bewusst nur
+          für die laufende Sitzung, damit du beliebig oft üben kannst. Dauerhaft gespeichert
+          werden dein Profil, deine abgeschlossenen Module und deine eigenen Prompts.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Die App zeigt nur den Hinweis, ich solle das Fenster vergrößern.</p>
+          <p class="a">Die App ist für den Dienst-PC ausgelegt und braucht ein Browserfenster
+          von mindestens ca. 900&nbsp;Pixeln Breite. Fenster maximieren oder ein größeres
+          Gerät verwenden – dann erscheint die App automatisch.</p>
+        </div>
+        <div class="faq-item">
+          <p class="q">Darf ich echte Kundendaten eingeben, wenn es doch lokal bleibt?</p>
+          <p class="a">Nein. Auch wenn technisch nichts übertragen wird: Die App ist eine
+          Lern-Demo, und der sichere Grundsatz, der hier geübt wird, lautet gerade –
+          <strong>keine echten Kunden- oder Sozialdaten in Lern-, Test- oder KI-Systeme</strong>.
+          Nutze fiktive oder anonymisierte Beispiele.</p>
         </div>
       </div>
-    </section>
-
-    <section class="privacy">
-      <h2>Datenschutz auf einen Blick</h2>
-      <ul>
-        <li>Keine echten Kundendaten – alle Inhalte sind Demo-Beispiele.</li>
-        <li>Kein Login, kein Server, kein Tracking.</li>
-        <li>Profil, Fortschritt und eigene Prompts bleiben ausschließlich lokal im Browser (localStorage).</li>
-        <li>Kein Sync zwischen Geräten; ein Browser-Reset kann lokale Daten löschen.</li>
-      </ul>
+      <p class="top-link"><a href="#inhalt">↑ Zum Inhaltsverzeichnis</a></p>
     </section>
 
   </main>
