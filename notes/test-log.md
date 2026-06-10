@@ -1,5 +1,34 @@
 # Test Log
 
+## 2026-06-10 — Claude: Umlaut-Bereinigung (ue/oe/ae → ü/ö/ä) in Anzeigetexten
+
+### Scope
+
+Angezeigte deutsche Texte mit ASCII-Ersatz (ue/oe/ae) auf echte Umlaute umgestellt.
+Bewusst **nicht** angefasst: `id:`-Werte, Typ-Literale, Property-Keys (`pruefpfad`,
+`quellenarten`), Klassennamen/CSS-Selektoren, Font-Namen, die Regex-Matchmuster und die
+`normalize*`-Funktionen (dort wird Nutzereingabe ü→ue normalisiert = Logik). `ß`/`ss`
+blieb unverändert (Wunsch betraf nur ü/ö/ä).
+
+### Geänderte Dateien
+
+- `src/data/content.ts` — Module, Rollen-Kontexte, Fragen, Praxisbeispiele, Prüfpfad-/
+  Hinweis-/Stichwort-Texte. IDs und Regex unverändert.
+- `src/data/prompts.ts` — Titel, Tags und Prompttexte der Builtin-Prompts.
+- `src/App.tsx` — BAKIRA-Hilfsantworten, aria-label „Benutzermenü…", „Quelle/Prüfung:";
+  `CATEGORY_TAG_KEYWORDS` an die neuen Tags (prüfung/qualität/verständlichkeit/erklärung/
+  rückfragen/präzision) angepasst, damit der Kategoriefilter weiter greift.
+- `src/lib/promptGenerator.ts` — Ausgabetext des generierten Prompts (Aufgabe/Prüfung…),
+  `detectType`/Regex/`normalize` unverändert.
+- `tests/smoke.spec.ts`, `src/lib/promptGenerator.test.ts` — Assertions auf neue Anzeigetexte
+  angepasst; Nav-Klick „Prüfen" mit `exact: true` (Kollision mit „Nachforderung prüfen").
+
+### Ergebnis
+
+- `npm test` (Vitest): 46/46 passed.
+- `npm run build` (tsc + vite): grün.
+- `npm run test:e2e` (Playwright): 75/75 passed.
+
 ## 2026-06-10 — Claude: Lernbereich-Auswahl & KI-Level-Frageklick
 
 ### Scope (Handoff `2026-06-10-codex-to-claude-job-app-learning-area-dropdown-rework.md`)

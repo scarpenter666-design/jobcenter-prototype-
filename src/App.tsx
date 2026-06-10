@@ -77,12 +77,12 @@ function useIsNarrowViewport(): boolean {
 function createBkiraResponse(message: string): string {
   const lower = message.toLowerCase();
   if (lower.includes("prompt")) {
-    return "Strukturiere den Prompt nach Aufgabe, Kontext, gewuenschtem Ergebnis und Pruefkriterien. So kannst du die Antwort besser kontrollieren.";
+    return "Strukturiere den Prompt nach Aufgabe, Kontext, gewünschtem Ergebnis und Prüfkriterien. So kannst du die Antwort besser kontrollieren.";
   }
   if (lower.includes("daten") || lower.includes("datenschutz")) {
-    return "Nutze fuer Uebungen nur fiktive oder anonymisierte Beispiele. Echte Kundendaten gehoeren nicht in diesen lokalen Demo-Chat.";
+    return "Nutze für Übungen nur fiktive oder anonymisierte Beispiele. Echte Kundendaten gehören nicht in diesen lokalen Demo-Chat.";
   }
-  return "Starte mit einer klaren Frage und pruefe die Antwort danach fachlich. Ich kann dir helfen, Aufgabe, Grenzen und Pruefschritte zu schaerfen.";
+  return "Starte mit einer klaren Frage und prüfe die Antwort danach fachlich. Ich kann dir helfen, Aufgabe, Grenzen und Prüfschritte zu schärfen.";
 }
 
 // ── Prompt filter ──────────────────────────────────────────────────────────────
@@ -344,7 +344,7 @@ function TopBar({
         ref={settingsBtnRef}
         className="profile-button"
         onClick={onSettingsOpen}
-        aria-label="Benutzermenue und Einstellungen"
+        aria-label="Benutzermenü und Einstellungen"
       >
         <User size={18} aria-hidden="true" />
         <span className="profile-name">{firstName}</span>
@@ -749,11 +749,11 @@ const PROMPT_CATEGORIES: PromptCategory[] = [
 
 // Pragmatic category mapping derived from existing tags/department.
 const CATEGORY_TAG_KEYWORDS: Record<string, string[]> = {
-  schreiben: ["schreiben", "stil", "umformulierung", "sprache", "ton", "verstaendlichkeit"],
-  pruefen: ["pruefung", "qualitaet", "check", "tabelle"],
+  schreiben: ["schreiben", "stil", "umformulierung", "sprache", "ton", "verständlichkeit"],
+  pruefen: ["prüfung", "qualität", "check", "tabelle"],
   datenschutz: ["datenschutz", "kundendaten", "sicherheit"],
-  lernen: ["lernen", "grundlagen", "quiz", "erklaerung", "recherche", "fachpersona"],
-  prompting: ["prompting", "struktur", "vorlage", "verbesserung", "rueckfragen", "praezision", "generator"],
+  lernen: ["lernen", "grundlagen", "quiz", "erklärung", "recherche", "fachpersona"],
+  prompting: ["prompting", "struktur", "vorlage", "verbesserung", "rückfragen", "präzision", "generator"],
   teamleitung: ["teamleitung", "standard"]
 };
 
@@ -1751,7 +1751,7 @@ function ModuleDetailScreen({
         <p className="detail-summary">{mod.summary}</p>
         {mod.warning && <p className="detail-warning">{mod.warning}</p>}
         {mod.sourceRefs && (
-          <p className="detail-source">Quelle/Pruefung: {mod.sourceRefs.join(" · ")}</p>
+          <p className="detail-source">Quelle/Prüfung: {mod.sourceRefs.join(" · ")}</p>
         )}
       </div>
       <div className="card-stage" aria-live="polite" aria-atomic="true">

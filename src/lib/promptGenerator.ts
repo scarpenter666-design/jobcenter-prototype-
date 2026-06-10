@@ -42,34 +42,34 @@ function buildPromptBlocks(
 ): string {
   if (type === "schreiben") {
     return [
-      `Aufgabe: Formuliere oder ueberarbeite den folgenden Text.`,
+      `Aufgabe: Formuliere oder überarbeite den folgenden Text.`,
       `Kontext: ${concern}`,
       `Zielgruppe/Persona: ${persona}`,
       `Format: ${format}`,
       `Tonfall: ${tone}`,
-      `Pruefung/Rueckfragen: Falls der Auftrag unklar ist, frage zuerst nach dem gewuenschten Stil und Zweck. Weise auf Stellen hin, die fachlich geprueft werden muessen.`
+      `Prüfung/Rückfragen: Falls der Auftrag unklar ist, frage zuerst nach dem gewünschten Stil und Zweck. Weise auf Stellen hin, die fachlich geprüft werden müssen.`
     ].join("\n");
   }
 
   if (type === "pruefen") {
     return [
-      `Aufgabe: Pruefe den folgenden Entwurf fachlich und inhaltlich.`,
+      `Aufgabe: Prüfe den folgenden Entwurf fachlich und inhaltlich.`,
       `Kontext: ${concern}`,
       `Zielgruppe/Persona: ${persona}`,
-      `Format: ${format} — benenne Schwachstellen klar und uebersichtlich.`,
+      `Format: ${format} — benenne Schwachstellen klar und übersichtlich.`,
       `Tonfall: ${tone}`,
-      `Pruefung/Rueckfragen: Benenne konkret unklare Aussagen, fehlende Pruefschritte und Punkte, die eine Fachkraft selbst entscheiden muss. Keine echten Kundendaten verwenden.`
+      `Prüfung/Rückfragen: Benenne konkret unklare Aussagen, fehlende Prüfschritte und Punkte, die eine Fachkraft selbst entscheiden muss. Keine echten Kundendaten verwenden.`
     ].join("\n");
   }
 
   if (type === "erklaeren") {
     return [
-      `Aufgabe: Erklaere das folgende Thema verstaendlich.`,
+      `Aufgabe: Erkläre das folgende Thema verständlich.`,
       `Kontext: ${concern}`,
       `Zielgruppe/Persona: ${persona}`,
       `Format: ${format}`,
       `Tonfall: ${tone}`,
-      `Pruefung/Rueckfragen: Falls das Thema unklar ist, frage zuerst nach dem Wissensstand. Weise darauf hin, wenn Inhalte fachlich geprueft werden sollten.`
+      `Prüfung/Rückfragen: Falls das Thema unklar ist, frage zuerst nach dem Wissensstand. Weise darauf hin, wenn Inhalte fachlich geprüft werden sollten.`
     ].join("\n");
   }
 
@@ -80,7 +80,7 @@ function buildPromptBlocks(
       `Zielgruppe/Persona: Arbeitsmarktexpertin — ${persona}`,
       `Format: ${format}`,
       `Tonfall: ${tone}`,
-      `Pruefung/Rueckfragen: Weise auf Datenuecken und unsichere Angaben hin. Ergebnisse muessen gegen aktuelle Fachinformationen geprueft werden.`
+      `Prüfung/Rückfragen: Weise auf Datenlücken und unsichere Angaben hin. Ergebnisse müssen gegen aktuelle Fachinformationen geprüft werden.`
     ].join("\n");
   }
 
@@ -91,7 +91,7 @@ function buildPromptBlocks(
     `Zielgruppe/Persona: ${persona}`,
     `Format: ${format}`,
     `Tonfall: ${tone}`,
-    `Pruefung/Rueckfragen: Falls der Auftrag unklar ist, stelle zuerst Rueckfragen. Weise auf fachliche Pruefpflichten hin.`
+    `Prüfung/Rückfragen: Falls der Auftrag unklar ist, stelle zuerst Rückfragen. Weise auf fachliche Prüfpflichten hin.`
   ].join("\n");
 }
 

@@ -21,9 +21,9 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Formuliere oder ueberarbeite");
+      expect(result.prompt).toContain("Formuliere oder überarbeite");
       expect(result.prompt).toContain("Aufgabe:");
-      expect(result.prompt).toContain("Pruefung/Rueckfragen:");
+      expect(result.prompt).toContain("Prüfung/Rückfragen:");
     }
   });
 
@@ -31,7 +31,7 @@ describe("generatePrompt", () => {
     const result = generatePrompt({ concern: "Diesen text bitte umschreiben fuer Buerger" });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Formuliere oder ueberarbeite");
+      expect(result.prompt).toContain("Formuliere oder überarbeite");
     }
   });
 
@@ -41,9 +41,9 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Pruefe den folgenden Entwurf");
+      expect(result.prompt).toContain("Prüfe den folgenden Entwurf");
       expect(result.prompt).toContain("Aufgabe:");
-      expect(result.prompt).toContain("Pruefung/Rueckfragen:");
+      expect(result.prompt).toContain("Prüfung/Rückfragen:");
     }
   });
 
@@ -53,9 +53,9 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Erklaere das folgende Thema");
+      expect(result.prompt).toContain("Erkläre das folgende Thema");
       expect(result.prompt).toContain("Aufgabe:");
-      expect(result.prompt).toContain("Pruefung/Rueckfragen:");
+      expect(result.prompt).toContain("Prüfung/Rückfragen:");
     }
   });
 
@@ -81,7 +81,7 @@ describe("generatePrompt", () => {
       expect(result.prompt).toContain("Zielgruppe/Persona:");
       expect(result.prompt).toContain("Format:");
       expect(result.prompt).toContain("Tonfall:");
-      expect(result.prompt).toContain("Pruefung/Rueckfragen:");
+      expect(result.prompt).toContain("Prüfung/Rückfragen:");
     }
   });
 
@@ -118,7 +118,7 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Pruefe den folgenden Entwurf");
+      expect(result.prompt).toContain("Prüfe den folgenden Entwurf");
     }
   });
 
@@ -128,7 +128,7 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Erklaere das folgende Thema");
+      expect(result.prompt).toContain("Erkläre das folgende Thema");
     }
   });
 
@@ -138,7 +138,7 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Pruefe den folgenden Entwurf");
+      expect(result.prompt).toContain("Prüfe den folgenden Entwurf");
     }
   });
 
@@ -148,7 +148,7 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Formuliere oder ueberarbeite");
+      expect(result.prompt).toContain("Formuliere oder überarbeite");
     }
   });
 
@@ -158,7 +158,7 @@ describe("generatePrompt", () => {
     });
     expect(result.valid).toBe(true);
     if (result.valid) {
-      expect(result.prompt).toContain("Formuliere oder ueberarbeite");
+      expect(result.prompt).toContain("Formuliere oder überarbeite");
     }
   });
 });

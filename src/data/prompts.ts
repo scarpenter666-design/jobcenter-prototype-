@@ -5,33 +5,33 @@ const now = "2026-05-25T00:00:00.000Z";
 export const builtinPrompts: SavedPrompt[] = [
   {
     id: "builtin-fachlich-pruefen",
-    title: "KI-Antwort fachlich pruefen",
+    title: "KI-Antwort fachlich prüfen",
     department: "alle",
-    tags: ["Pruefung", "Qualitaet", "Sicherheit"],
+    tags: ["Prüfung", "Qualität", "Sicherheit"],
     prompt:
-      "Pruefe den folgenden KI-Entwurf fachlich. Achte auf unklare Aussagen, fehlende Pruefschritte, riskante Formulierungen und Punkte, die eine Fachkraft selbst entscheiden muss. Nutze nur fiktive oder anonymisierte Beispiele.",
+      "Prüfe den folgenden KI-Entwurf fachlich. Achte auf unklare Aussagen, fehlende Prüfschritte, riskante Formulierungen und Punkte, die eine Fachkraft selbst entscheiden muss. Nutze nur fiktive oder anonymisierte Beispiele.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-buergerfreundlich",
-    title: "Buergerfreundlich umformulieren",
+    title: "Bürgerfreundlich umformulieren",
     department: "alle",
-    tags: ["Sprache", "Verstaendlichkeit", "Ton"],
+    tags: ["Sprache", "Verständlichkeit", "Ton"],
     prompt:
-      "Formuliere den folgenden Text klarer und buergerfreundlicher. Erhalte die fachliche Aussage, vermeide Fachjargon wo moeglich und markiere Stellen, die fachlich geprueft werden muessen.",
+      "Formuliere den folgenden Text klarer und bürgerfreundlicher. Erhalte die fachliche Aussage, vermeide Fachjargon wo möglich und markiere Stellen, die fachlich geprüft werden müssen.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-datenschutz-check",
-    title: "Datenschutz-Check fuer einen Entwurf",
+    title: "Datenschutz-Check für einen Entwurf",
     department: "alle",
     tags: ["Datenschutz", "Kundendaten", "Check"],
     prompt:
-      "Pruefe den folgenden fiktiven Entwurf darauf, ob unnoetige personenbezogene Daten, sensible Details oder identifizierende Informationen enthalten sind. Schlage datensparsame Alternativen vor.",
+      "Prüfe den folgenden fiktiven Entwurf darauf, ob unnötige personenbezogene Daten, sensible Details oder identifizierende Informationen enthalten sind. Schlage datensparsame Alternativen vor.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
@@ -42,29 +42,29 @@ export const builtinPrompts: SavedPrompt[] = [
     department: "allgemein",
     tags: ["Lernen", "Grundlagen", "Quiz"],
     prompt:
-      "Erstelle eine kurze Lernfrage zu KI-Grundlagen im Jobcenter-Kontext. Gib eine richtige Antwort, zwei plausible falsche Antworten und eine kurze Erklaerung.",
+      "Erstelle eine kurze Lernfrage zu KI-Grundlagen im Jobcenter-Kontext. Gib eine richtige Antwort, zwei plausible falsche Antworten und eine kurze Erklärung.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-teamleitung",
-    title: "Teamleitungs-Check fuer sichere KI-Nutzung",
+    title: "Teamleitungs-Check für sichere KI-Nutzung",
     department: "leitung",
     tags: ["Teamleitung", "Standard", "Sicherheit"],
     prompt:
-      "Erstelle eine kompakte Checkliste fuer Teamleitungen, mit der ein Team sichere KI-Nutzung im Arbeitsalltag besprechen kann. Fokus: Datenschutz, fachliche Verantwortung, Transparenz und Lernbedarf.",
+      "Erstelle eine kompakte Checkliste für Teamleitungen, mit der ein Team sichere KI-Nutzung im Arbeitsalltag besprechen kann. Fokus: Datenschutz, fachliche Verantwortung, Transparenz und Lernbedarf.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-prompt-verbessern",
-    title: "Prompt verbessern mit Aufgabe, Kontext und Pruefkriterien",
+    title: "Prompt verbessern mit Aufgabe, Kontext und Prüfkriterien",
     department: "alle",
     tags: ["Prompting", "Struktur", "Verbesserung"],
     prompt:
-      "Verbessere meinen Prompt. Strukturiere ihn nach Aufgabe, Kontext, gewuenschtem Ergebnis, Grenzen und Pruefkriterien. Weise auf fehlende Informationen hin, statt sie zu erfinden.",
+      "Verbessere meinen Prompt. Strukturiere ihn nach Aufgabe, Kontext, gewünschtem Ergebnis, Grenzen und Prüfkriterien. Weise auf fehlende Informationen hin, statt sie zu erfinden.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
@@ -75,29 +75,29 @@ export const builtinPrompts: SavedPrompt[] = [
     department: "alle",
     tags: ["Prompting", "Vorlage", "Struktur"],
     prompt:
-      "Erstelle einen strukturierten Prompt nach dieser Vorlage:\nAufgabe: [Was soll getan werden? Klares Aktionsverb: generieren, pruefen, erklaeren, umschreiben]\nKontext: [Fiktiver oder anonymisierter Arbeitsfall]\nZielgruppe/Persona: [Fuer wen ist die Ausgabe? z. B. Buergerin, Fachkraft, Auszubildende]\nFormat: [Wie soll die Ausgabe aussehen? z. B. E-Mail, Liste, Tabelle, Fliesstext]\nTonfall: [professionell, sachlich, buergerfreundlich, persoenlich]\nPruefkriterien: [Woran erkennst du, dass die Ausgabe gut ist?]\nNutze nur fiktive Beispieldaten.",
+      "Erstelle einen strukturierten Prompt nach dieser Vorlage:\nAufgabe: [Was soll getan werden? Klares Aktionsverb: generieren, prüfen, erklären, umschreiben]\nKontext: [Fiktiver oder anonymisierter Arbeitsfall]\nZielgruppe/Persona: [Für wen ist die Ausgabe? z. B. Bürgerin, Fachkraft, Auszubildende]\nFormat: [Wie soll die Ausgabe aussehen? z. B. E-Mail, Liste, Tabelle, Fliesstext]\nTonfall: [professionell, sachlich, bürgerfreundlich, persönlich]\nPrüfkriterien: [Woran erkennst du, dass die Ausgabe gut ist?]\nNutze nur fiktive Beispieldaten.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-rueckfragen-zuerst",
-    title: "BAKIRA fragt zuerst Rueckfragen",
+    title: "BAKIRA fragt zuerst Rückfragen",
     department: "alle",
-    tags: ["Prompting", "Rueckfragen", "Praezision"],
+    tags: ["Prompting", "Rückfragen", "Präzision"],
     prompt:
-      "Bevor du eine Antwort oder einen Entwurf erstellst, stelle mir drei gezielte Rueckfragen, um den Auftrag besser zu verstehen. Frage nach: Zielgruppe, gewuenschtem Format und konkretem Ziel. Erst nach meiner Antwort erstellst du das Ergebnis.",
+      "Bevor du eine Antwort oder einen Entwurf erstellst, stelle mir drei gezielte Rückfragen, um den Auftrag besser zu verstehen. Frage nach: Zielgruppe, gewünschtem Format und konkretem Ziel. Erst nach meiner Antwort erstellst du das Ergebnis.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-grammatik-tabelle",
-    title: "Grammatik und Rechtschreibung pruefen (Tabelle)",
+    title: "Grammatik und Rechtschreibung prüfen (Tabelle)",
     department: "alle",
-    tags: ["Sprache", "Qualitaet", "Tabelle"],
+    tags: ["Sprache", "Qualität", "Tabelle"],
     prompt:
-      "Pruefe den folgenden fiktiven Text auf Grammatik- und Rechtschreibfehler. Gib das Ergebnis als Tabelle aus mit drei Spalten: Fundstelle (zitierter Textausschnitt), Fehlerart (Grammatik oder Rechtschreibung), Korrekturvorschlag. Weise am Ende auf Stellen hin, bei denen du unsicher bist.",
+      "Prüfe den folgenden fiktiven Text auf Grammatik- und Rechtschreibfehler. Gib das Ergebnis als Tabelle aus mit drei Spalten: Fundstelle (zitierter Textausschnitt), Fehlerart (Grammatik oder Rechtschreibung), Korrekturvorschlag. Weise am Ende auf Stellen hin, bei denen du unsicher bist.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
@@ -108,18 +108,18 @@ export const builtinPrompts: SavedPrompt[] = [
     department: "alle",
     tags: ["Schreiben", "Stil", "Umformulierung"],
     prompt:
-      "Schreibe den folgenden fiktiven Text oder die folgende Muster-E-Mail in einem klar vorgegebenen Stil um. Stil: [z. B. sachlich-freundlich, formell, buergerfreundlich]. Zielgruppe: [Buergerin oder Buerger, Fachkraft, Teamkollegin]. Erhalte den fachlichen Inhalt vollstaendig. Markiere Stellen, die fachlich geprueft werden muessen.",
+      "Schreibe den folgenden fiktiven Text oder die folgende Muster-E-Mail in einem klar vorgegebenen Stil um. Stil: [z. B. sachlich-freundlich, formell, bürgerfreundlich]. Zielgruppe: [Bürgerin oder Bürger, Fachkraft, Teamkollegin]. Erhalte den fachlichen Inhalt vollständig. Markiere Stellen, die fachlich geprüft werden müssen.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now
   },
   {
     id: "builtin-erklaer-fachpersona",
-    title: "Recherche und Erklaerung mit Fachpersona",
+    title: "Recherche und Erklärung mit Fachpersona",
     department: "alle",
-    tags: ["Erklaerung", "Recherche", "Fachpersona"],
+    tags: ["Erklärung", "Recherche", "Fachpersona"],
     prompt:
-      "Du bist eine erfahrene Arbeitsmarktexpertin. Erklaere das folgende Thema verstaendlich fuer Mitarbeitende im Jobcenter, die noch wenig Erfahrung damit haben. Thema: [Thema eintragen]. Format: kurze Erklaerung, dann drei Praxisbeispiele mit fiktiven Daten. Weise am Ende auf Punkte hin, die fachlich validiert werden muessen.",
+      "Du bist eine erfahrene Arbeitsmarktexpertin. Erkläre das folgende Thema verständlich für Mitarbeitende im Jobcenter, die noch wenig Erfahrung damit haben. Thema: [Thema eintragen]. Format: kurze Erklärung, dann drei Praxisbeispiele mit fiktiven Daten. Weise am Ende auf Punkte hin, die fachlich validiert werden müssen.",
     isBuiltin: true,
     createdAt: now,
     updatedAt: now

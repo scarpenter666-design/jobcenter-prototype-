@@ -161,7 +161,7 @@ test.describe("Learning flow", () => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
     await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
     // The module lives in the "Dein Bereich" section (general section was removed here).
-    await page.getByRole("button", { name: /Nachforderung pruefen/ }).click();
+    await page.getByRole("button", { name: /Nachforderung prüfen/ }).click();
     await expect(page.getByRole("button", { name: /Weiter/ })).toBeVisible();
     await page.getByRole("button", { name: /Weiter/ }).click();
     await page.getByRole("button", { name: /Weiter/ }).click();
@@ -180,7 +180,7 @@ test.describe("Learning flow", () => {
     await expect(page.getByRole("heading", { name: "Dein Bereich: Leistungsbereich" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toHaveCount(0);
     await expect(page.getByText("Bürgergeld und Anspruch einordnen")).toBeVisible();
-    await expect(page.getByText("KI einfach erklaert")).toHaveCount(0);
+    await expect(page.getByText("KI einfach erklärt")).toHaveCount(0);
   });
 
   test("myth quiz opens from Lernen overview and shows correct feedback after answer", async ({ page }) => {
@@ -197,13 +197,13 @@ test.describe("Learning flow", () => {
     await expect(page.locator(".case-action-hint")).toBeVisible();
     await page.getByRole("button", { name: /Fachregel, Datenumfang/ }).click();
     await expect(page.getByText("Sicherer Weg")).toBeVisible();
-    await expect(page.getByText("KI-Texte sind Arbeitsentwuerfe")).toBeVisible();
+    await expect(page.getByText("KI-Texte sind Arbeitsentwürfe")).toBeVisible();
   });
 
   test("Prüfen tab shows case input and generates Prüfweg with sources", async ({ page }) => {
     await page.getByRole("button", { name: "Prüfen" }).click();
     await expect(page.getByLabel("Fall oder Thema eingeben")).toBeVisible();
-    await expect(page.getByText("Quelle oder Fachregel gegenpruefen")).toHaveCount(0);
+    await expect(page.getByText("Quelle oder Fachregel gegenprüfen")).toHaveCount(0);
     await page.getByLabel("Fall oder Thema eingeben").fill("Bürgergeld, Einkommen und fehlende Unterlagen");
     await page.getByRole("button", { name: "Prüfweg anzeigen" }).click();
     await expect(page.locator(".pruef-result")).toBeVisible();
@@ -403,8 +403,8 @@ test("prompt library searches built-in prompts", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /Prompt-Bibliothek/ })).toBeVisible();
   await page.getByRole("button", { name: "Alle Prompts" }).click();
   await page.getByLabel("Prompts suchen").fill("Datenschutz");
-  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
-  await expect(page.getByText("Buergerfreundlich umformulieren")).toHaveCount(0);
+  await expect(page.getByText("Datenschutz-Check für einen Entwurf")).toBeVisible();
+  await expect(page.getByText("Bürgerfreundlich umformulieren")).toHaveCount(0);
 });
 
 test("custom prompt can be created, edited, deleted and persists locally", async ({ page }) => {
@@ -445,7 +445,7 @@ test("prompt generator creates a structured prompt from an Anliegen", async ({ p
   await page.getByRole("button", { name: /Prompt generieren/ }).click();
   await expect(page.locator(".gen-result")).toBeVisible();
   await expect(page.locator(".gen-preview")).toContainText("Aufgabe:");
-  await expect(page.locator(".gen-preview")).toContainText("Pruefung/Rueckfragen:");
+  await expect(page.locator(".gen-preview")).toContainText("Prüfung/Rückfragen:");
 });
 
 test("generated prompt can be saved and appears in library after reload", async ({ page }) => {
@@ -480,8 +480,8 @@ test("prompt generator handles natural German input with umlauts correctly", asy
   await page.getByRole("button", { name: /Prompt generieren/ }).click();
   await expect(page.locator(".gen-result")).toBeVisible();
   // Should produce Erklaer-Prompt, not generic fallback
-  await expect(page.locator(".gen-preview")).toContainText("Erklaere das folgende Thema");
-  await expect(page.locator(".gen-preview")).toContainText("Pruefung/Rueckfragen:");
+  await expect(page.locator(".gen-preview")).toContainText("Erkläre das folgende Thema");
+  await expect(page.locator(".gen-preview")).toContainText("Prüfung/Rückfragen:");
 });
 
 // ── Reset functions ───────────────────────────────────────────────────────────
@@ -611,12 +611,12 @@ test("high self-assessment score shows Praxis vertiefen and recommends nachforde
   // Confidence profile level should be shown
   await expect(page.getByText(/Dein Startpunkt: Praxis vertiefen/)).toBeVisible();
 
-  // The "Empfohlener naechster Schritt" section should show Nachforderung pruefen
+  // The "Empfohlener naechster Schritt" section should show Nachforderung prüfen
   const nextStepSection = page.locator("section").filter({ hasText: "Empfohlener nächster Schritt" });
-  await expect(nextStepSection.getByText(/Nachforderung pruefen/)).toBeVisible();
+  await expect(nextStepSection.getByText(/Nachforderung prüfen/)).toBeVisible();
 
-  // And must NOT show "KI einfach erklaert" as the recommended next step
-  await expect(nextStepSection.getByText(/KI einfach erklaert/)).toHaveCount(0);
+  // And must NOT show "KI einfach erklärt" as the recommended next step
+  await expect(nextStepSection.getByText(/KI einfach erklärt/)).toHaveCount(0);
 });
 
 // ── Visual polish: dark+rot praxis readability (JOB-APP-12) ─────────────────
@@ -923,11 +923,11 @@ test("prompt search works within the selected category", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Prompts" }).click();
   await page.getByRole("button", { name: "Datenschutz und Sicherheit" }).click();
-  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  await expect(page.getByText("Datenschutz-Check für einen Entwurf")).toBeVisible();
   await page.getByLabel("Prompts suchen").fill("Datenschutz");
-  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  await expect(page.getByText("Datenschutz-Check für einen Entwurf")).toBeVisible();
   // A non-datenschutz prompt is not in this category
-  await expect(page.getByText("Buergerfreundlich umformulieren")).toHaveCount(0);
+  await expect(page.getByText("Bürgerfreundlich umformulieren")).toHaveCount(0);
 });
 
 test("dark theme active desktop navigation uses white text for rot, gruen and blau", async ({ page }) => {
@@ -985,11 +985,12 @@ test("clicking Lernen in the nav always returns to the start selection", async (
   // Open Lernen → Dein Lernbereich → a department module → back: now in the modules sub-page.
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
   await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
-  await page.getByRole("button", { name: /Nachforderung pruefen/ }).click();
+  await page.getByRole("button", { name: /Nachforderung prüfen/ }).click();
   await page.getByRole("button", { name: "Zurück zum Lernpfad" }).click();
   await expect(page.getByRole("button", { name: /Angepasst an dein KI-Level/ })).toBeVisible();
   // Navigate away and back via the sidebar — must reset to the three-card start.
-  await page.getByRole("button", { name: "Prüfen" }).click();
+  // exact: true so the nav tab is not confused with the "Nachforderung prüfen" module button.
+  await page.getByRole("button", { name: "Prüfen", exact: true }).click();
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
   await expect(page.getByRole("button", { name: /Dein Lernbereich öffnen/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /Mythos oder Realität öffnen/ })).toBeVisible();
@@ -1022,7 +1023,7 @@ test("Prompt area opens a detail page with a back button to the Prompt-Bibliothe
   await expect(page.locator(".prompt-card")).toHaveCount(0);
   await page.getByRole("button", { name: "Datenschutz und Sicherheit" }).click();
   await expect(page.locator(".prompt-card").first()).toBeVisible();
-  await expect(page.getByText("Datenschutz-Check fuer einen Entwurf")).toBeVisible();
+  await expect(page.getByText("Datenschutz-Check für einen Entwurf")).toBeVisible();
   await page.getByRole("button", { name: "Zurück zur Prompt-Bibliothek" }).click();
   await expect(page.locator(".prompt-category-bar")).toBeVisible();
   await expect(page.locator(".prompt-card")).toHaveCount(0);
