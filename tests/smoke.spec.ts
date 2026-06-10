@@ -144,23 +144,24 @@ test.describe("Learning flow", () => {
 
   test("Lernen tab shows 3 area entry cards in overview", async ({ page }) => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
-    await expect(page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Dein Lernbereich öffnen/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Mythos oder Realität öffnen/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Praxisfallbeispiele öffnen/ })).toBeVisible();
   });
 
   test("Lernen overview area card navigates to modules and back", async ({ page }) => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
-    await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
-    await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toBeVisible();
+    await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+    await expect(page.getByRole("button", { name: /Angepasst an dein KI-Level/ })).toBeVisible();
     await page.getByRole("button", { name: /Zurück zum Lernbereich/ }).click();
-    await expect(page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Dein Lernbereich öffnen/ })).toBeVisible();
   });
 
   test("module card flow completes and toggles done badge", async ({ page }) => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
-    await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
-    await page.getByRole("button", { name: /KI einfach erklaert/ }).click();
+    await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+    // The module lives in the "Dein Bereich" section (general section was removed here).
+    await page.getByRole("button", { name: /Nachforderung pruefen/ }).click();
     await expect(page.getByRole("button", { name: /Weiter/ })).toBeVisible();
     await page.getByRole("button", { name: /Weiter/ }).click();
     await page.getByRole("button", { name: /Weiter/ }).click();
@@ -170,15 +171,16 @@ test.describe("Learning flow", () => {
     await expect(page.getByText("Fertig").first()).toBeVisible();
   });
 
-  test("learning path keeps shared KI basics and adds the selected department area", async ({
+  test("learning area shows only the department section, not the general KI basics section", async ({
     page
   }) => {
     await page.getByRole("button", { name: "Lernen", exact: true }).click();
-    await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
-    await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toBeVisible();
+    await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+    // Department section stays, the general "KI-Grundlagen für alle" section is gone.
     await expect(page.getByRole("heading", { name: "Dein Bereich: Leistungsbereich" })).toBeVisible();
-    await expect(page.getByText("KI einfach erklaert")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toHaveCount(0);
     await expect(page.getByText("Bürgergeld und Anspruch einordnen")).toBeVisible();
+    await expect(page.getByText("KI einfach erklaert")).toHaveCount(0);
   });
 
   test("myth quiz opens from Lernen overview and shows correct feedback after answer", async ({ page }) => {
@@ -851,11 +853,12 @@ test("einsteiger and fortgeschritten onboarding show different Mythos questions"
   ).toHaveCount(0);
 });
 
-test("KI-Grundlagen area shows level-adaptive Lernfragen", async ({ page }) => {
+test("Dein Lernbereich shows level-adaptive Lernfragen after clicking the KI-Level card", async ({ page }) => {
   await completeOnboardingHighScore(page);
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
   await expect(page.getByText(/Lernfragen für dein Level/)).toBeVisible();
+  await page.getByRole("button", { name: /Angepasst an dein KI-Level/ }).click();
   await expect(
     page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen im konkreten Arbeitskontext/)
   ).toBeVisible();
@@ -945,47 +948,52 @@ test("dark theme active desktop navigation uses white text for rot, gruen and bl
 
 // ── Lern-, Praxis-, Prompt-Navigation Rework (2026-06-05) ──────────────────────
 
-test("KI-Grundlagen für alle shows real basics questions and no Mythos/Realität buttons", async ({ page }) => {
+test("Dein Lernbereich shows real basics questions and no Mythos/Realität buttons", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
   await expect(page.getByText(/Lernfragen für dein Level/)).toBeVisible();
+  // Questions are hidden until the KI-Level card is clicked.
+  await expect(page.locator(".basics-card")).toHaveCount(0);
+  await page.getByRole("button", { name: /Angepasst an dein KI-Level/ }).click();
   await expect(page.locator(".basics-card").first()).toBeVisible();
   // The myth/reality answer buttons must not appear in the basics quiz anymore.
   await expect(page.locator(".basics-quiz").getByRole("button", { name: "Mythos", exact: true })).toHaveCount(0);
   await expect(page.locator(".basics-quiz").getByRole("button", { name: "Realität", exact: true })).toHaveCount(0);
 });
 
-test("KI-Grundlagen questions differ between einsteiger and fortgeschritten", async ({ page }) => {
+test("Lernbereich questions differ between einsteiger and fortgeschritten", async ({ page }) => {
   // Low score → einsteiger: easy basics, no advanced governance question.
   await completeOnboarding(page);
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+  await page.getByRole("button", { name: /Angepasst an dein KI-Level/ }).click();
   await expect(page.getByText(/Was ist eine KI-Antwort im Arbeitsalltag/)).toBeVisible();
   await expect(page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen/)).toHaveCount(0);
 
   // High score → fortgeschritten: advanced basics, no einsteiger question.
   await completeOnboardingHighScore(page);
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
+  await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+  await page.getByRole("button", { name: /Angepasst an dein KI-Level/ }).click();
   await expect(page.getByText(/KI-Kompetenz heisst, Nutzen und Grenzen/)).toBeVisible();
   await expect(page.getByText(/Was ist eine KI-Antwort im Arbeitsalltag/)).toHaveCount(0);
 });
 
 test("clicking Lernen in the nav always returns to the start selection", async ({ page }) => {
   await completeOnboarding(page);
-  // Open Lernen → KI-Grundlagen → a module → back: now sitting in the modules sub-page.
+  // Open Lernen → Dein Lernbereich → a department module → back: now in the modules sub-page.
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ }).click();
-  await page.getByRole("button", { name: /KI einfach erklaert/ }).click();
+  await page.getByRole("button", { name: /Dein Lernbereich öffnen/ }).click();
+  await page.getByRole("button", { name: /Nachforderung pruefen/ }).click();
   await page.getByRole("button", { name: "Zurück zum Lernpfad" }).click();
-  await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Angepasst an dein KI-Level/ })).toBeVisible();
   // Navigate away and back via the sidebar — must reset to the three-card start.
   await page.getByRole("button", { name: "Prüfen" }).click();
   await page.getByRole("button", { name: "Lernen", exact: true }).click();
-  await expect(page.getByRole("button", { name: /KI-Grundlagen für alle öffnen/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Dein Lernbereich öffnen/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /Mythos oder Realität öffnen/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "KI-Grundlagen für alle" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Angepasst an dein KI-Level/ })).toHaveCount(0);
 });
 
 test("Lern sub-pages use 'Zurück zum Lernbereich' back button", async ({ page }) => {

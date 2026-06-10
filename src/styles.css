@@ -1121,6 +1121,43 @@ body {
   margin-bottom: 8px;
 }
 
+/* ── Clickable KI-Level card (reveals the level questions on click) ── */
+.level-toggle-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.level-toggle-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.level-toggle-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.level-toggle-main .level-badge {
+  margin-bottom: 0;
+}
+
+.level-toggle-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .lernen-area-intro {
   font-size: 13px;
   color: var(--text-muted);

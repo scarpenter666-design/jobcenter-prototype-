@@ -1447,10 +1447,19 @@ function LernpfadScreen({
   initialArea?: LearningArea;
 }) {
   const [activeArea, setActiveArea] = useState<LearningArea>(initialArea);
+  // The KI-Level questions reveal only after the user clicks the level card.
+  const [showLevelQuestions, setShowLevelQuestions] = useState(false);
+
+  // Reset the reveal whenever the modules area is left, so re-entering starts collapsed.
+  useEffect(() => {
+    if (activeArea !== "modules") setShowLevelQuestions(false);
+  }, [activeArea]);
 
   const sections = getLearningPathSections(progress.selectedRole ?? "allgemein");
   const recommended = new Set(getRecommendedModules(progress.selectedRole ?? "allgemein"));
-  const sectionData = [sections.general, sections.roleSpecific];
+  // Only the role-specific section is shown here; the general "KI-Grundlagen für alle"
+  // section was removed from this view per the learning-area rework.
+  const sectionData = [sections.roleSpecific];
 
   // Level-dependent interactive content (driven by profile.aiLevel)
   const mythList = mythQuestionsByLevel[aiLevel];
@@ -1465,11 +1474,11 @@ function LernpfadScreen({
         <section className="screen-section" aria-label="Lernbereiche">
           <p className="section-label">Lernbereiche</p>
           <div className="lernen-area-grid">
-            <button className="lernen-area-card" onClick={() => setActiveArea("modules")} aria-label="KI-Grundlagen für alle öffnen">
+            <button className="lernen-area-card" onClick={() => setActiveArea("modules")} aria-label="Dein Lernbereich öffnen">
               <span className="lernen-area-icon" aria-hidden="true"><BookOpen size={22} /></span>
               <span className="lernen-area-content">
-                <p className="lernen-area-title">KI-Grundlagen für alle</p>
-                <p className="lernen-area-desc">Starte mit kurzen Lernkarten zu sicherem KI-Einsatz und deinem Arbeitsbereich.</p>
+                <p className="lernen-area-title">Dein Lernbereich</p>
+                <p className="lernen-area-desc">Starte mit Fragen passend zu deinem KI-Level und deinem Arbeitsbereich.</p>
               </span>
               <ChevronRight size={17} className="module-chevron" aria-hidden="true" />
             </button>
@@ -1506,6 +1515,26 @@ function LernpfadScreen({
         </div>
         <section className="screen-section" aria-labelledby="lernen-basics-quiz-heading">
           <p className="section-label" id="lernen-basics-quiz-heading">Lernfragen für dein Level</p>
+          {!showLevelQuestions ? (
+            <button
+              type="button"
+              className="level-toggle-card"
+              onClick={() => setShowLevelQuestions(true)}
+              aria-expanded={false}
+              aria-label={`Angepasst an dein KI-Level: ${AI_LEVEL_LABEL[aiLevel]} — Lernfragen anzeigen`}
+            >
+              <span className="level-toggle-main">
+                <span className="level-badge">
+                  Angepasst an dein KI-Level: {AI_LEVEL_LABEL[aiLevel]}
+                </span>
+                <span className="level-toggle-hint">
+                  Tippe hier, um deine passenden Lernfragen anzuzeigen.
+                </span>
+              </span>
+              <ChevronRight size={18} className="module-chevron" aria-hidden="true" />
+            </button>
+          ) : (
+            <>
           <LevelBadge aiLevel={aiLevel} />
           <p className="lernen-area-intro">
             Kurze Fragen passend zu deinem KI-Level. Ordne die Aussagen ein und erhalte direkt Feedback.
@@ -1543,6 +1572,8 @@ function LernpfadScreen({
               );
             })}
           </div>
+            </>
+          )}
         </section>
         {sectionData.map((section) => (
           <section className="screen-section" aria-labelledby={`${section.title}-heading`} key={section.title}>

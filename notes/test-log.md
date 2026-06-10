@@ -1,5 +1,27 @@
 # Test Log
 
+## 2026-06-10 — Claude: Lernbereich-Auswahl & KI-Level-Frageklick
+
+### Scope (Handoff `2026-06-10-codex-to-claude-job-app-learning-area-dropdown-rework.md`)
+
+- Lern-Startkarte „KI-Grundlagen für alle" → „Dein Lernbereich" umbenannt (Titel, `aria-label`, Beschreibung).
+- In der `modules`-Ansicht erscheinen die Lernfragen erst nach Klick auf eine klickbare KI-Level-Karte (`.level-toggle-card`, neuer State `showLevelQuestions`, reset beim Verlassen via `useEffect`).
+- Allgemeine Modul-Section „KI-Grundlagen für alle" aus dieser Ansicht entfernt (`sectionData = [sections.roleSpecific]`); `Dein Bereich: <Abteilung>` bleibt. `src/lib/progress.ts` unverändert (general-Title bleibt für Lib/Unit-Tests).
+
+### Geänderte Dateien
+
+- `src/App.tsx` — Startkarte, `LernpfadScreen` modules-Ansicht, neuer State + Reset.
+- `src/styles.css` — `.level-toggle-card`, `.level-toggle-main`, `.level-toggle-hint`.
+- `tests/smoke.spec.ts` — Lern-Tests auf neues Verhalten angepasst (Klick auf KI-Level-Karte vor Fragen; Modul jetzt aus „Dein Bereich"; general-Section abwesend).
+
+### Ergebnis
+
+- `npm test` (Vitest): 46/46 passed.
+- `npm run build` (tsc + vite): grün.
+- `npm run test:e2e` (Playwright): 75/75 passed.
+
+Deployment/Push: noch offen (lokal verifiziert, nicht committet/gepusht).
+
 ## 2026-06-03 — Codex Planning: JOB-APP-16
 
 Scope geplant, keine App-Implementierung durch Codex.
